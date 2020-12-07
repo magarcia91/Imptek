@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Obras Cerradas Imptek</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+</head>
+<body style="background-color: #e9e9e9;">
+	<div th:replace="/header :: header"> </div>
+	<div class="container mt-4">
+		<!-- <a  th:href="@{/contacto/new}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Agregar Nuevo Registro</a> -->
+		<br>
+		
+		<div id="myAlert" class="alert alert-success collapse">
+		    <a id="linkClose" href="#" class="close">&times;</a>
+		    <strong>Archivo generado con éxito !!!!</strong>
+		</div>
+		
+		<div id="myAlert" class="alert alert-danger collapse">
+		    <a id="linkClose" href="#" class="close">&times;</a>
+		    <strong>Error!</strong> Hubo un error al generar el archivo, contáctese con el administrador!!!!
+		</div>
+
+		<div align="right">
+			
+			<label for="search_input">Buscar:</label>
+			</span><input id="search" type="text"
+				placeholder="Buscar Nombre" name="search" style="height: 26px;">
+				<span class="glyphicon glyphicon-search"></span>
+		</div>
+				
+		<br>
+
+		<div style="overflow-y:auto;">
+			<table id="contactoTable" class="table table-bordered table-striped mb-0">
+				<thead>
+					<tr class="header">
+					
+						<th style="text-align: center">PROYECTO</th>
+						<th style="text-align: center">CIUDAD</th>
+						<th style="text-align: center">ZONA</th>
+						<th style="text-align: center">CONSTRUCTORA</th>
+						<th style="text-align: center">AVANCE</th>
+																
+					</tr>
+				</thead>
+
+					
+				<tbody>			
+					<tr th:each="a:${avance}" align="center">
+							<!-- <td th:if="${c.contactoAvanceObr} =='100%'"></td> -->												
+							<td th:text="${a.contactoProyectoObr}"></td>			
+							<td th:text="${a.contactoCiudadObr}"></td>
+							<td th:text="${a.contactoZonaObr}"></td>
+							<td th:text="${a.contactoConstructoraObr}"></td>
+							<td th:text="${a.contactoAvanceObr}"></td>								
+										
+					</tr>				
+				</tbody>				
+			</table>			
+				<br>		
+				<div>
+					 <a th:href="@{/contacto/obrasCerradasReport.pdf}" class="btn btn-info"><span
+							class="glyphicon glyphicon-download-alt"></span> Generar PDF</a> 
+					<a th:href="@{/userForm}" class="btn btn-warning"><span
+							class="glyphicon glyphicon-chevron-left"></span>Regresar</a>
+				</div>			
+								
+		<div align="center">
+				<div class="row" style="width:80% !important;">
+					<div class="col-md-2"></div>
+					<div class="col-md-12">
+						<nav aria-label="Pagination">
+							<ul class="pagination justify-content-center">
+								<li class="page-item" th:classappend="${prev == 0 ? 'disabled': ''}">
+									<a class="page-link" th:href="@{|/contacto/avance?page=${prev}|}">Anterior</a>
+								</li>
+								<li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active': ''}">
+									<a class="page-link" th:href="@{|/contacto/avance?page=${page}|}" th:text="${page}"></a>
+								</li>
+								<li class="page-item" th:classappend="${current == last ? 'disabled': ''}">
+									<a class="page-link" th:href="@{|/contacto/avance?page=${next}|}">Siguiente</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				<div class="col-md-2"></div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	
+	<footer class="footer" th:replace="/footer :: footer"></footer>
+		
+	<script th:inline='javascript'>
+	
+	var usuario =  /*[[${usuarios}]]*/;
+	
+	$(function() {
+		  $("#search").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#contactoTable > tbody > tr").filter(function() {     
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
+			
+	</script>
+			
+
+</body>
+</html>

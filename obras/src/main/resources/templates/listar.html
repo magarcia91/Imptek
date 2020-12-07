@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Lista de Usuarios</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  
+  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+</head>
+<body style="background-color: #FFFFFF;">
+	<div th:replace="/header :: header"> </div>
+	<div class="container mt-4">
+		<a th:href="@{/new}" class="btn btn-primary"> <span class="glyphicon glyphicon-plus"></span>Registro de Usuario</a>
+		<div align="right">
+			
+			<label for="search_input">Buscar:</label>
+			</span><input id="search" type="text"
+				placeholder="Buscar Nombre" name="search" style="height: 26px;">
+				<span class="glyphicon glyphicon-search"></span>
+			<!-- <button type="submit">
+				<span class="glyphicon glyphicon-search"></span>
+			</button> -->
+		</div>
+				
+		<br>
+
+		<div style="overflow-y:auto;">
+			<table id="usersTable" class="table table-bordered table-striped mb-0">
+				<thead>
+					<tr class="header">
+						
+						<th>ID</th>
+						<th>NOMBRE USUARIO</th>
+						<th>CORREO</th>
+						<th>USUARIO</th>
+						<th>ROL</th>
+						<th>ACCIONES</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="usuario:${usuarios}" align="center">
+						
+						<td th:text="${usuario.idUsu}"></td>
+						<td th:text="${usuario.nombreUsu}"></td>
+						<td th:text="${usuario.correoUsu}"></td>
+						<td th:text="${usuario.nicknameUsu}"></td>
+						<td>
+								<span th:if="${usuario.rol == 1}">ADMINISTRADOR</span>
+								<span th:if="${usuario.rol == 2}">GERENTE</span>
+								<span th:if="${usuario.rol == 3}">JEFE</span>
+								<span th:if="${usuario.rol == 4}">ASESOR</span>
+						</td>
+						<td><a th:href="@{/editar/}+${usuario.idUsu}"
+							class="btn btn-warning">Editar</a>
+						</td>
+
+					</tr>				
+				</tbody>				
+			</table>
+			</div>
+	</div>
+	
+	
+	<footer class="footer" th:replace="/footer :: footer"> Footer </footer>
+				
+	<script th:inline='javascript'>
+	
+	var usuario =  /*[[${usuarios}]]*/;
+	
+	$(function() {
+		  $("#search").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#usersTable > tbody > tr").filter(function() {     
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
+		
+	/*$('#search').on('keyup',function(){
+		
+		var value= $(this).val();
+		console.log('Value = ' + value);
+		
+		var data= FilterFunction(value,usuario);
+		
+		rebuildTable(data)
+		
+	});
+	
+					
+	function FilterFunction(value,data){
+			var filteredData = [];
+			
+		for(var i=0;i<data.length;i++){
+				
+				value= value.toLowerCase();
+				var nomUsu = data[i].nombreUsu.toLowerCase();
+				
+			if(nomUsu.includes(value)){
+				filteredData.push(data[i]);
+			}
+					
+		}
+		return filteredData;
+	}
+	
+	function rebuildTable(data){
+			var table = document.getElementById('usersTable');
+			table.innerHTML=''
+					
+		for(var i=0;i<data.length;i++){
+			
+			var row = `<tr>
+							<td>${data[i].codUsu}</td>
+							<td>${data[i].nombreUsu}</td>
+							<td>${data[i].apellidoUsu}</td>
+							<td>${data[i].emailUsu}</td>
+							<td>${data[i].nickUsu}</td>
+							<td>${data[i].roles.nombreRol}</td>
+						</tr>`
+						table.innerHTML += row
+		}
+	
+	}*/
+	
+	</script>
+			
+
+</body>
+</html>

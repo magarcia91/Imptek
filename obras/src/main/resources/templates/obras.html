@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Lista de Obras Imptek</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+</head>
+<body style="background-color: #e9e9e9;">
+
+			<div th:replace="/header :: header"> </div>
+			
+			<div class="wrapper">
+				<h2 align="center">Gestión de Obras Departamento Comercial</h2>
+				<div class="form-group col-8" align="left">
+					<div class="alert alert-success alert-dismissible fade show" role="alert" th:if="${successmessage}">
+						<button type="button" class="close btn btn-primary" data-dismiss="alert" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+
+			<div id="myAlert" class="alert alert-success collapse" align="center">
+				<a id="linkClose" href="#" class="close">&times;</a> <strong>Archivo
+					seleccionado con éxito. Espere un momento mientras la informacion se actualiza!!!!</strong>
+			</div>
+
+			<div id="myAlert" class="alert alert-danger collapse" align="center">
+				<a id="linkClose" href="#" class="close"  style="top:5px; height: 42px; font-size:18px">&times;</a> <strong>Error!</strong>
+				Hubo un error al cargar el archivo, contáctese con el
+				administrador!!!!
+			</div>
+
+		</div>	
+				<div align="center">
+				<form th:action="@{'/detalle/fileupload'}" th:object="${obras}" method="post" enctype='multipart/form-data'>		
+													
+							<label for="fileupload">Cargar Archivo (EXCEL o CSV)</label> 
+							<input type="file" id="file" name="file">
+							<br>
+													
+							<button style="width: 10%; height:34px" id="btnSubmit" type="submit" class="btn btn-primary" onclick="showLoading()">Cargar Archivo</button>
+							
+							<!-- <button style="width: 10%;" type="reset" class="btn btn-primary" onclick="limpiarTabla()">Borrar Datos</button> -->
+							
+							<a th:href="@{/userForm}" class="btn btn-primary" style="height:36px;">
+								<span class="glyphicon glyphicon-chevron-left"></span>Regresar a Inicio	</a>							
+				</form>
+				</div><br>
+				<div class="col-md-12">					
+				<div align="center">
+					<form th:action="@{/detalle/buscar}">
+							<label for="ciudad">Ciudad:</label>
+							<input id="ciudad" type="text" placeholder="Ciudad" name="ciudad" th:value="${ciudad}" style="height: 26px;">
+							
+							<label for="zona">Zona:</label>
+							<input id="zona" type="text" placeholder="Zona" name="zona" th:value="${zona}" style="height: 26px;">
+							
+							<label for="sector">Sector:</label>
+							<input id="sector" type="text" placeholder="Sector" name="sector" th:value="${sector}" style="height: 26px;">
+							
+							<label for="estado">Estado:</label>
+							<input id="estado" type="text" placeholder="Estado" name="estado" th:value="${estado}" style="height: 26px;">
+							&nbsp;
+							<input type="submit" value="Buscar" class="btn btn-primary"/>
+							&nbsp;
+							<input type="button" value="Limpiar"  class="btn  btn-info" id="btnClear" onclick="clearSearch()" />
+						</form>
+				</div>
+				<br>
+				<div align="center"><h3>Detalle de Obras</h3></div>
+				<div align="right" style="width: 90% !important;">
+	
+							<!-- <label for="search_input">Buscar:</label></span><input id="search1"
+								type="text" placeholder="Ingrese un campo" name="search1"
+								style="height: 26px;"> <span
+								class="glyphicon glyphicon-search"></span> -->
+				
+				</div>
+				<div align="center">				
+				<table id="tableObras" style="width:80% !important;" class="table table-responsive table-striped table-bordered table-hover">
+						<thead>
+							<tr>
+								<th style="text-align: center">Nro</th>
+								<th style="text-align: center">Nombre del Proyecto</th>
+								<th style="text-align: center">Ciudad</th>
+								<th style="text-align: center">Zona Obra</th>
+								<th style="text-align: center">Sector Obra</th>							
+								<th style="text-align: center">Estado</th>
+								<th style="text-align: center">Ingresar/Ver Contacto</th>
+							</tr>
+						</thead>
+							<tbody align="center">
+								<tr th:each="obra, custStat : ${obras}">
+									<td th:text="${custStat.count}"></td>
+									<td th:text="${obra.nombreObr}"></td>
+									<td th:text="${obra.ciudadObr}"></td>
+									<td th:text="${obra.zonaObr}"></td>
+									<td th:text="${obra.sectorObr}"></td>							
+									<td th:text="${obra.statusObr}"></td>
+									<td><a th:href="@{/contacto/new/}+${obra.idObr}"
+									class="btn btn-info">Ingreso</a>
+									</td>	
+								</tr>				
+							</tbody>
+					</table>
+					
+				</div>
+				<div align="center">
+				<div class="row" style="width:80% !important;">
+					<div class="col-md-2"></div>
+					<div class="col-md-12">
+						<nav aria-label="Pagination">
+							<ul class="pagination justify-content-center">
+								<li class="page-item" th:classappend="${prev == 0 ? 'disabled': ''}">
+									<a class="page-link" th:href="@{|/detalle/obraLista?page=${prev}|}">Anterior</a>
+								</li>
+								<li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active': ''}">
+									<a class="page-link" th:href="@{|/detalle/obraLista?page=${page}|}" th:text="${page}"></a>
+								</li>
+								<li class="page-item" th:classappend="${current == last ? 'disabled': ''}">
+									<a class="page-link" th:href="@{|/detalle/obraLista?page=${next}|}">Siguiente</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+					<div class="col-md-2"></div>
+				</div>
+				</div>
+				<br/><br/><br/><br/><br/><br/>
+			  </div>
+			</div>
+			
+			<footer class="footer" th:replace="/footer :: footer"></footer>
+	
+	<script th:inline='javascript'>
+	
+	var usuario =  /*[[${usuarios}]]*/;
+	
+	$(function() {
+		  $("#search1").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#example > tbody > tr").filter(function() {     
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});	
+	
+	</script>
+	
+		
+	<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#btnSubmit').click(function () {
+            $('#myAlert').show('fade');
+
+            setTimeout(function () {
+                $('#myAlert').hide('fade');
+            }, 100000000);
+
+        });
+
+        $('#linkClose').click(function () {
+            $('#myAlert').hide('fade');
+        });
+
+    });
+	</script>
+	
+	<script type="text/javascript">
+	
+		function limpiarTabla(){			
+			$('#tableObras tbody').empty();
+		}		
+	
+	</script>
+	
+	<script type="text/javascript">
+	const showLoading = function() {
+		  swal({
+		    title: 'Cargando Archivo, Por favor Espere..',
+		    type: 'info',
+			icon : "warning",
+		    allowEscapeKey: false,
+		    allowOutsideClick: false,
+		    timer: 180000,
+		    onOpen: () => {
+		      swal.showLoading();
+		    }
+		  }).then(
+		    () => {},
+		    (dismiss) => {
+		      if (dismiss === 'timer') {
+		        console.log('closed by timer!!!!');
+		        swal({ 
+		          title: 'Archivo no cargado!!!',
+		          type: 'warning',
+		          timer: 50000,
+		          showConfirmButton: false
+		        })
+		      }
+		    }
+		  )
+		};
+		showLoading();
+
+		document.getElementById("btnSubmit")
+		  .addEventListener('click', (event) => {
+		    showLoading();
+		  });
+				
+	</script>
+	
+	<script>
+	  // your custom ajax request here
+	  function ajaxRequest(params) {
+	    var url = 'https://examples.wenzhixin.net.cn/examples/bootstrap_table/data'
+	    $.get(url + '?' + $.param(params.data)).then(function (res) {
+	      params.success(res)
+	    })
+	  }
+	  
+	  function clearSearch() {
+			window.location = "[[@{/detalle/obraLista}]]";
+		}
+	  
+	</script>
+	
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Registro Obras Externas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    
+  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+</head>
+<body style="background-color: #e9e9e9;">
+
+<div th:replace="/header :: header"></div>	
+	<div class="container py-6">			
+			<div class="col-md-7"  align="center">
+				<form id="registro_obraEx" th:action="@{/obras_ex/save}"
+					th:object=${obra_ex} method="POST" class="row justify-content-center">			
+						
+						   <h3>Registrar Obras Externas</h3>	
+						   <br>					
+					
+							<div class="form-group col-md-8">
+								<input th:field="*{idObrEx}" type="hidden" class="form-control">
+							</div>
+
+							<div class="form-group col-md-6">
+								<label>Nombre de la Obra</label> <input id=nomObrEx
+									name="nombreObrEx" th:field="*{nombreObrEx}" type="text"
+									placeholder="ej: OBRA A" class="form-control">
+							</div>
+							<!-- 							<select class="form-control" id="proyecto" name="contactoProyectoObr">
+								<option value="">Nombre del proyecto</option>
+								<option th:each="test : ${tests}" th:value="${test.nombreObr}"
+									th:text="${test.nombreObr}">								
+								</option>
+							</select>	 -->
+
+							<div class="form-group col-md-6">
+								<label>Ciudad de la Obra</label> <input id=ciuObrEx
+									name="ciudadObrEx" th:field="*{ciudadObrEx}" type="text"
+									placeholder="ej: QUITO" class="form-control">
+							</div>
+
+							<!-- 						<div class="form-group col-8">
+
+							<select class="form-control" id="ciudad"
+								name="contCiudadObrEx">
+								<option value="">Ciudad del Proyecto</option>
+								<option th:each="test : ${tests}" th:value="${test.ciudadObrEx}"
+									th:text="${test.ciudadObrEx}"></option>
+							</select>
+						</div> -->
+
+							<div class="form-group col-md-6">
+								<label>Zona de la Obra</label> <input id=zonObrEx
+									name="zonaObrEx" th:field="*{zonaObrEx}" type="text"
+									placeholder="ej: ZONA" class="form-control">
+							</div>
+
+							<!-- 						<div class="form-group col-8">
+
+							<select class="form-control" id="zona"
+								name="contZonObrEx">
+								<option value="">Zona del Proyecto</option>
+								<option th:each="test : ${tests}" th:value="${test.zonaObrEx}"
+									th:text="${test.zonaObrEx}"></option>
+							</select>
+
+						</div> -->
+
+							<div class="form-group col-md-6">
+								<label>Sector de la Obra</label> <input id=secObrEx
+									name="sectorObrEx" th:field="*{sectorObrEx}" type="text"
+									placeholder="ej: SECTOR" class="form-control">
+							</div>
+
+							<!-- 						<div class="form-group col-8">
+
+							<select class="form-control" id="sector"
+								name="contactoSectorObr">
+								<option value="">Sector del Proyecto</option>
+								<option th:each="test : ${tests}" th:value="${test.sectorObrEx}"
+									th:text="${test.sectorObrEx}"></option>
+							</select>
+
+						</div> -->
+
+							<div class="form-group col-md-6">
+								<label>Estado de la Obra</label> <input id=statObrEx
+									name="statusObrEx" th:field="*{statusObrEx}" type="text"
+									placeholder="ej: ESTADO" class="form-control">
+							</div>
+
+							<!-- 						<div class="form-group col-8">
+
+							<select class="form-control" id="status"
+								name="contactoStatusObr">
+								<option value="">Estado de la Obra</option>
+								<option th:each="test : ${tests}" th:value="${test.statusObrEx}"
+									th:text="${test.statusObrEx}"></option>
+							</select>
+
+						</div> -->
+					
+							<div class="form-group col-md-6">
+								<label>Constructor de la Obra</label> <input id=constObrEx
+									name="constObrEx" th:field="*{constObrEx}" type="text"
+									placeholder="ej: CONSTRUCTOR" class="form-control">
+							</div>
+							
+							<div class="form-group col-md-6">
+								<label>Cotización</label> <input id=cotizacionObrEx
+									name="cotizacionObrEx" th:field="*{cotizacionObrEx}" type="text"
+								    placeholder="ej: 9999.99" class="form-control">
+							</div>
+
+							<div class="form-group col-md-6">
+								<label>Fecha Cotización</label> <input id=fechaCotObrEx
+									name="fechaCotObrEx" th:field="*{fechaCotObrEx}" type="date"
+									class="form-control">
+							</div>
+
+							<div class="form-group col-md-6">
+								<label>Fecha de Cierre</label> <input id=fechaCieObrEx
+									name="fechaCieObrEx" th:field="*{fechaCieObrEx}" type="date"
+									class="form-control">
+							</div>			
+						
+									
+							<div class="form-group col-md-12">
+								<label>Comentarios</label>
+								<textarea id=comentObrEx name="comentObrEx"
+									th:field="*{comentObrEx}" style="height: 100px"
+									class="form-control"></textarea>
+							</div>	
+									
+							<br><br>
+																					    
+							<div class="form-group col-md-12" align="left">
+									<input id="btnSubmit" type="submit" value="Guardar"
+										class="btn btn-success" onclick="validate()"> <input
+										id="btnClean" type="button" value="Limpiar Campos"
+										class="btn btn-info" onclick="cleanForm()">
+								<a th:href="@{/userForm}" class="btn btn-warning btn-md" style="top:5px; height: 42px; font-size:18px"><span
+								class="glyphicon glyphicon-chevron-left" style="font-size: 18px"></span>Regresar</a>	 
+							</div>
+															    
+					    </form>		    
+										    
+			   	</div>				
+			</div>	
+		 
+	
+	<br><br><br><br>
+	<footer class="footer" th:replace="/footer :: footer"></footer>
+	
+	<script  type="text/javascript">  
+	    $(document).ready(function () {  
+	        $("input[type=text]").keyup(function () {  
+	            $(this).val($(this).val().toUpperCase());  
+	        });  
+	    });  
+	  
+	    function GetData() {  
+	        alert($("#nomObrEx").val()); 
+	        alert($("#ciuObrEx").val()); 
+	        alert($("#zonObrEx").val());  
+	        alert($("#secObrEx").val());  
+	        alert($("#statObrEx").val());  
+	        alert($("#constObrEx").val());  
+	         
+	    }  
+	</script> 
+	
+		
+	<script type="text/javascript">
+	
+	
+	$("#nomObrEx").keyup(function () {
+	    var test = /[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/;
+	    if (test.test($(this).val())) {
+	        $("#nomObrEx").val($(this).val().replace(/[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/g, ""));
+	    }
+	});
+	
+	
+	$("#ciuObrEx").keyup(function () {
+	    var test = /[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/;
+	    if (test.test($(this).val())) {
+	        $("#ciuObrEx").val($(this).val().replace(/[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/g, ""));
+	    }
+	});
+	
+	$("#zonObrEx").keyup(function () {
+	    var test = /[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/;
+	    if (test.test($(this).val())) {
+	        $("#zonObrEx").val($(this).val().replace(/[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/g, ""));
+	    }
+	});
+	
+	$("#secObrEx").keyup(function () {
+	    var test = /[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/;
+	    if (test.test($(this).val())) {
+	        $("#secObrEx").val($(this).val().replace(/[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/g, ""));
+	    }
+	});
+	
+	$("#statObrEx").keyup(function () {
+	    var test = /[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/;
+	    if (test.test($(this).val())) {
+	        $("#statObrEx").val($(this).val().replace(/[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/g, ""));
+	    }
+	});
+	
+	$("#constObrEx").keyup(function () {
+	    var test = /[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/;
+	    if (test.test($(this).val())) {
+	        $("#constObrEx").val($(this).val().replace(/[^a-z A-ZáéíóúüñÁÉÍÓÚ]+$/g, ""));
+	    }
+	});	
+	
+	$("#cotizacionObrEx").keyup(function () {
+		var test = /\D+(\.\D)/;
+	    if (test.test($(this).val())) {
+	    	$("#cotizacionObrEx").val($(this).val().replace(/\D+(\.\D)/g, ""));
+	    }
+	});	
+		
+	</script>
+	
+	<script type="text/javascript">
+		$(function validate() {
+			$("#btnSubmit")
+					.click(
+							function() {
+
+								var name = $("#nomObrEx").val();
+								var city = $("#ciuObrEx").val();
+								var zone = $("#zonObrEx").val();
+								var sector= $("#secObrEx").val();
+								var status= $("#statObrEx").val();
+								var builder= $("#constObrEx").val();
+								var cotizacion= $("#cotizacionObrEx").val();
+								var date1= $("#fechaCotObrEx").val();
+								var date2= $("#fechaCieObrEx").val();
+																								
+								if (name == '' && city == '' && zone == '' && sector == '' && status == '' && builder == ''
+									&& cotizacion == '' && date1 == '' && date2 == '') {	
+																					
+									swal({
+										title : "Por favor complete los campos requeridos en el formulario!!!",
+										icon : "warning",
+										button : "Ok",
+									})
+									return false;
+								}
+
+								else {
+									swal({
+										title : "Registro creado exitosamente!!!",
+										icon : "success",
+										timer: 16000000,
+										button : "Ok",
+										
+									})
+									return true;
+								}
+							});
+		});
+		
+		function cleanForm() {
+		    document.getElementById("registro_obraEx").reset();
+		  }
+				
+	</script>
+	
+	</body>
+</html>
+	
+	
+	<!-- <div class="form-group col-md-6">
+								<label>Avance</label>
+									<select class="form-control" id="porcentajeObras"
+										name="avanceObrEx" th:field="*{avanceObrEx}">
+										<option value="0">Seleccione el avance</option>
+										<option th:value="0+'%'" th:text="'0%'"></option>
+										<option th:value="10+'%'" th:text="'10%'"></option>
+										<option th:value="20+'%'" th:text="'20%'"></option>
+										<option th:value="30+'%'" th:text="'30%'"></option>
+										<option th:value="40+'%'" th:text="'40%'"></option>
+										<option th:value="50+'%'" th:text="'50%'"></option>
+										<option th:value="60+'%'" th:text="'60%'"></option>
+										<option th:value="70+'%'" th:text="'70%'"></option>
+										<option th:value="80+'%'" th:text="'80%'"></option>
+										<option th:value="90+'%'" th:text="'90%'"></option>
+										<option th:value="100+'%'" th:text="'100%'"></option>
+									</select>									
+							</div> -->
+								
+<!-- 	<script type="text/javascript">
+
+
+/* $(window).load(function(){
+	
+  // Delay show just to simulate a real page with tons of content to load
+  window.setInterval(showPage, 3000);
+  
+  function showPage() {
+  	$('body').show();
+  }
+  
+}); */
+
+ const infoLoading = function() {
+	
+		  swal({
+		    title: 'Actualizando Info',
+		    type: 'info',
+			icon : "info",
+		    allowEscapeKey: false,
+		    allowOutsideClick: false,
+		    timer: 150000,
+		    onOpen: () => {
+		      swal.showLoading();
+		    }
+		  }).then(
+		    () => {},
+		    (dismiss) => {
+		      if (dismiss === 'timer') {
+		        console.log('closed by timer!!!!');
+		        swal({ 
+		          title: 'Info no actualizada!!!',
+		          type: 'warning',
+		          timer: 5000,
+		          showConfirmButton: false
+		        })
+		      }
+		    }
+		  )
+		};
+		infoLoading();  
+ 
+	 	document.getElementById("btnRegresar")
+		  .addEventListener('click', (event) => {
+		    showLoading();
+		  });   -->
+			 
+<!-- </script> 
+
+	<div class="form-group col-8" align="left">
+							<label>Nombre del Proyecto</label> <input id=nombre th:field="*{obra.nombreObr}" type="text" class="form-control">
+						</div>
+
+					<div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.nombreObr}">
+								<option value="0">Seleccione el Proyecto</option>
+								<option th:value="Proyecto1" th:text="'Proyecto1'"></option>
+								<option th:value="Proyecto2" th:text="'Proyecto2'"></option>
+								<option th:value="Proyecto3" th:text="'Proyecto3'"></option>
+								<option th:value="Proyecto4" th:text="'Proyecto4'"></option>
+								<option th:value="Proyecto5" th:text="'Proyecto5'"></option>
+							</select>
+						</div> 
+
+					<div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.ciudadObr}">
+								<option value="0">Seleccione la ciudad</option>
+									<option th:value="Quito" th:text="'Quito'"></option>
+									<option th:value="Guayaquil" th:text="'Guayaquil'"></option>							
+								<option th:each="obr: ${obras}"
+									th:value="${obr.idObr}" th:text="${obr.nombreObr}"></option>
+							</select>
+						</div> 
+						
+					<div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.sectorObr}">
+								<option value="0">Seleccione el sector</option>
+								<option th:value="Norte" th:text="'Norte'"></option>
+								<option th:value="Sur" th:text="'Sur'"></option>
+								<option th:value="Centro" th:text="'Centro'"></option>
+								<option th:value="Chillos" th:text="'Chillos'"></option>
+								<option th:value="Tumbaco" th:text="'Tumbaco'"></option>
+							</select>
+						</div> 
+						
+						<div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.constructoraObr}">
+								<option value="0">Seleccione el constructor</option>
+									<option th:value="ConstructorA" th:text="'ConstructorA'"></option>
+									<option th:value="ConstructorB" th:text="'ConstructorB'"></option>
+									<option th:value="ConstructorC" th:text="'ConstructorC'"></option>
+									<option th:value="ConstructorD" th:text="'ConstructorD'"></option>							
+							</select>
+						</div> 
+							
+						<div  class="form-group col-8">								
+								 <select  class="form-control" id="porcentajeObras" th:field="*{obra.avanceObr}">
+									<option value="0">Seleccione el avance</option>									
+									<option th:value="0+'%'" th:text="'0%'"></option>
+									<option th:value="10+'%'" th:text="'10%'"></option>
+									<option th:value="20+'%'" th:text="'20%'"></option>
+									<option th:value="30+'%'" th:text="'30%'"></option>
+									<option th:value="40+'%'" th:text="'40%'"></option>
+									<option th:value="50+'%'" th:text="'50%'"></option>
+									<option th:value="60+'%'" th:text="'60%'"></option>
+									<option th:value="70+'%'" th:text="'70%'"></option>
+									<option th:value="80+'%'" th:text="'80%'"></option>
+									<option th:value="90+'%'" th:text="'90%'"></option>
+									<option th:value="100+'%'" th:text="'100%'"></option>
+								</select>
+						</div>
+						
+						<div  class="form-group col-8">							
+								 <select  class="form-control" id="estadoObras" th:field="*{obra.statusObr}">
+									<option value="">Seleccione el estado</option>									
+									<option th:value="Abortado" th:text="'Abortado'"></option>
+									<option th:value="En_Marcha" th:text="'En_Marcha'"></option>
+									<option th:value="Paralizado" th:text="'Paralizado'"></option>
+									<option th:value="Total_Vendido" th:text="'Total_Vendido'"></option>						
+								</select>
+						</div>
+						
+
+
+					<div class="form-group col-12" align="left">
+								<label>Comentarios</label>
+								<textarea th:field="*{comentarioVis}" type="text"
+									class="form-control" style="height: 150px"></textarea>
+						</div>	
+	
+	
+	<script type="text/javascript">
+	
+ 	$("#ciudad").change(function() {
+ 		  if ($(this).data('options') === undefined) {
+		    /*Taking an array of all options-2 and kind of embeddng it on the select1*/
+ 		     $(this).data('options', $('#proyecto option').clone());
+ 		   
+ 		    } 		  
+ 			 var id = $(this).val();
+ 	 		 var options = $(this).data('options').filter('[value=' + id + ']');
+ 	 		 $('#proyecto').html(options);
+ 	 	
+ 			
+ 	});		
+ 	
+ 	$("#zona").change(function() {
+		  if ($(this).data('options') === undefined) {
+		    /*Taking an array of all options-2 and kind of embeddng it on the select1*/
+		     $(this).data('options', $('#sector option').clone());
+		   
+		    } 		  
+			 var id = $(this).val();
+	 		 var options = $(this).data('options').filter('[value=' + id + ']');
+	 		 $('#sector').html(options);	 	
+			
+	});
+ 	
+	</script>
+		
+//	<script type="text/javascript">
+ 	
+//  	$("#zona").change(function() {
+// 		  if ($(this).data('options') === undefined) {
+// 		    /*Taking an array of all options-2 and kind of embeddng it on the select1*/
+// 		     $(this).data('options', $('#sector option').clone());
+		   
+// 		    } 		  
+// 			 var id = $(this).val();
+// 	 		 var options = $(this).data('options').filter('[value=' + id + ']');
+// 	 		 $('#sector').html(options);	 	
+			
+// 	});
+ 	
+	</script>
+	
+ -->	
+
+ 

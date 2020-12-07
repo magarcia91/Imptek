@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Página de Inicio</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+
+</head>
+
+<body style="background-color: #B7CF00;">
+	
+	<div th:replace="/header1 :: header"> </div>
+	<div align="center">
+		<h2 style="color: white;">Sistema de Gestión de Obras</h2>
+	</div>
+	<div align="center">
+	  <div class="col-12">
+	  	    <strong th:text="${successmessage}"></strong>
+	  		<strong th:text="${nombreUsu}"></strong>
+          	<img src="static/img/fondo_paper.jpg" th:src="@{/img/fondo_paper.jpg}"/>
+      </div>
+      </div>
+	<div class="footer" th:replace="/footer :: footer"> </div>
+</body>
+</html>
