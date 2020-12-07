@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Registro de Bitácora</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+</head>
+<body style="background-color: #e9e9e9;">
+
+<div th:replace="/header :: header"></div>	
+	<div class="container py-6">			
+			<div class="col-md-7"  align="center">
+				<form id="registro_fact" th:action="@{/factura/save}"
+					th:object=${factura} method="POST" enctype="multipart/form-data" class="row justify-content-center">			
+						
+							<h3>Registro de Información</h3>
+						
+							<div class="form-group col-md-6">
+								<input th:field="*{cliente.idCliente}" type="hidden" class="form-control">
+							</div>	
+									
+																			
+							<div class="form-group col-md-6">
+								<input th:field="*{idFact}" type="hidden" class="form-control">
+							</div> 													
+												
+							<div class="form-group col-md-6">
+								<label>Código Cliente</label> <input id=codCliente
+									name="codCliente" th:field="*{cliente.codCliente}" type="text"
+									placeholder="ej: 99999999" class="form-control" style="border: 1px solid black" readonly>
+							</div>
+							
+							<div class="form-group col-md-6">
+								<label>Nombre Cliente</label> <input id=nomCliente
+									name="nomCliente" th:field="*{cliente.nomCliente}" type="text"
+									placeholder="ej: 99999999" class="form-control" style="border: 1px solid black" readonly>
+							</div>						
+													
+													
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+								<label>#Factura</label> 
+								<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=numFact name="numFact" th:field="*{numFact}" type="text"
+									placeholder="ej: 99999999" class="form-control" style="border: 1px solid black" readonly>
+								<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" 
+								id=numFact name="numFact" th:field="*{numFact}" type="text"
+									placeholder="ej: 99999999" class="form-control" style="border: 1px solid black" >
+							</div>				
+					
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+								<label>Fecha Factura</label>
+								 <input  th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=fechaFact name="fechaFact" th:field="*{fechaFact}" type="date"
+									class="form-control" style="border: 1px solid black" readonly>
+								 <input  th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" 
+								 id=fechaFact name="fechaFact" th:field="*{fechaFact}" type="date"
+									class="form-control" style="border: 1px solid black">										
+							</div>									
+													
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+							<label>Forma de Pago</label>
+							
+							<select th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" 
+							th:field="*{pago}" class="form-control" id="pago" name="pago" style="border: 1px solid black; height: 40px" readonly>
+								<option value="">Seleccione la forma de pago</option>
+								<option th:each="p : ${pagos}" 
+								    th:value="${p.idPago}"
+								    th:text="${p.formaPago}">
+								</option>
+							</select>
+
+							<select th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')') or #authorization.expression('hasRole(''ROLE_FINAN'')') }" 
+							th:field="*{pago}" class="form-control" id="pago" name="pago" style="border: 1px solid black; height: 40px">
+								<option value="">Seleccione la forma de pago</option>
+								<option th:each="p : ${pagos}" 
+								    th:value="${p.idPago}"
+								    th:text="${p.formaPago}">
+								</option>
+							</select>
+							</div>  
+							
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+								<fieldset th:disabled="${boPago}">
+									<label>Foto Pago</label> 
+									<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=fotoPago type="file" name="fotoPago" accept="image/png, image/jpg" class="form-control-file">
+									<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}"
+									 id=fotoPago type="file" name="fotoPago" accept="image/png, image/jpg" class="form-control-file">
+								 </fieldset>
+							</div>
+							
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+								<label>Monto del Pago</label>
+								<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=valorPago name="valorPago" th:field="*{valorPago}" type="text" placeholder="ej: 99.999999" 
+								class="form-control" style="border: 1px solid black" readonly>
+								<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" id=valorPago name="valorPago" th:field="*{valorPago}" 
+								type="text" placeholder="ej: 99.999999" class="form-control" style="border: 1px solid black">
+							</div>							
+																				
+							<!-- <div class="form-group col-md-6">								
+								<img id="thumbnail" alt="Foto Preview" />
+							</div>  --> 										
+			
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}"  class="form-group col-md-6">
+								<label># Compensación</label> 
+								<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=numComp name="numComp" th:field="*{numComp}" type="text"
+									placeholder="ej: 999999999" class="form-control" style="border: 1px solid black" readonly>
+								<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" 
+								 id=numComp name="numComp" th:field="*{numComp}" type="text" placeholder="ej: 999999999" class="form-control" style="border: 1px solid black">
+							</div>
+
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+								<label>Fecha Compensación</label> 
+								<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=fechaComp	name="fechaComp" th:field="*{fechaComp}" type="date"
+									class="form-control" style="border: 1px solid black" readonly>
+								<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}"  
+								    id=fechaComp name="fechaComp" th:field="*{fechaComp}" type="date"
+									class="form-control" style="border: 1px solid black">
+							</div>								
+							
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6 cedula">
+								<fieldset th:disabled="${boRef}">
+									<label># Referencia</label> 
+									<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=factReferencia name="factReferencia" th:field="*{factReferencia}" type="text"
+										placeholder="ej: 999999999" class="form-control" style="border: 1px solid black" readonly>
+									<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" 
+									id=factReferencia name="factReferencia" th:field="*{factReferencia}" type="text"
+										placeholder="ej: 999999999" class="form-control" style="border: 1px solid black">
+								</fieldset>
+							</div>
+							
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6 cedula">
+								<fieldset th:disabled="${boNumLote}">
+									<label># Lote</label>
+									 <input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=factNumLote name="factNumLote" th:field="*{factNumLote}" type="text"
+										placeholder="ej: 999999999" class="form-control" style="border: 1px solid black" readonly>
+									 <input  th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" 
+									 id=factNumLote name="factNumLote" th:field="*{factNumLote}" type="text"
+										placeholder="ej: 999999999" class="form-control" style="border: 1px solid black">
+								</fieldset>
+							</div>		
+														
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6 cedula">
+								<fieldset th:disabled="${boLote}">
+									<label>Foto Lote</label> 
+									<input  th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=fotoLote type="file" name="fotoLote" accept="image/png, image/jpg" class="form-control-file">
+									<input  th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}"
+									 id=fotoLote type="file" name="fotoLote" accept="image/png, image/jpg" class="form-control-file">
+								</fieldset>
+							</div> 
+													
+																				
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+								<label># Comprobante Ingreso</label> 
+								<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=docFacSap	name="docFacSap" th:field="*{docFacSap}" type="text"
+									placeholder="ej: 999999999" class="form-control" style="border: 1px solid black" readonly>
+								<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}"
+								 id=docFacSap	name="docFacSap" th:field="*{docFacSap}" type="text" placeholder="ej: 999999999" class="form-control" style="border: 1px solid black">
+							</div>						
+						
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+								<label>Fecha de Creación</label> 
+								<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}"  id=createAt	name="createAt" th:field="*{createAt}" type="date"
+									class="form-control" style="border: 1px solid black" readonly>
+								<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" id=createAt	name="createAt" th:field="*{createAt}" type="date"
+									class="form-control" style="border: 1px solid black">
+							</div>	
+							
+																							
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">
+							<label>Canal Comercial</label>
+							<select  th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" class="form-control" id="centroFactura" name="centroFactura" th:field="*{centroFactura}" style="border: 1px solid black; height: 40px" readonly>
+								<option value="">Seleccione el canal</option>
+								<option th:value="'Casa Imptek Cashapamba'" th:text="'Casa Imptek Cashapamba'"></option>
+								<option th:value="'Casa Imptek Cumbayá'" th:text="'Casa Imptek Cumbayá'"></option>
+								<option th:value="'Casa Imptek La Naval'" th:text="'Casa La Naval'"></option>
+								<option th:value="'Mayorista Sierra'" th:text="'Mayorista Sierra'"></option>
+								<option th:value="'Mayorista Costa'" th:text="'Mayorista Costa'"></option>
+								<option th:value="'Exportaciones'" th:text="'Exportaciones'"></option>
+								<option th:value="'Viales'" th:text="'Viales'"></option>
+							</select>
+							
+							<select th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')') OR #authorization.expression('hasRole(''ROLE_FINAN'')')}" 
+							class="form-control" id="centroFactura" name="centroFactura" th:field="*{centroFactura}" style="border: 1px solid black; height: 40px">
+								<option value="">Seleccione el canal</option>
+								<option th:value="'Casa Imptek Cashapamba'" th:text="'Casa Imptek Cashapamba'"></option>
+								<option th:value="'Casa Imptek Cumbayá'" th:text="'Casa Imptek Cumbayá'"></option>
+								<option th:value="'Casa Imptek La Naval'" th:text="'Casa La Naval'"></option>
+								<option th:value="'Mayorista Sierra'" th:text="'Mayorista Sierra'"></option>
+								<option th:value="'Mayorista Costa'" th:text="'Mayorista Costa'"></option>
+								<option th:value="'Exportaciones'" th:text="'Exportaciones'"></option>
+								<option th:value="'Viales'" th:text="'Viales'"></option>
+							</select>
+							</div>  
+							
+							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6">							
+								<label>Comprobar Factura</label>
+								 <div class="form-group">
+							        <input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')') or #authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="form-check-input" id="factComprobacion" 
+							         type="checkbox" th:field="*{factComprobacion}" style="border: 1px solid black">
+							        <input th:case="${#authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" 
+							         class="form-check-input" id="factComprobacion" type="checkbox" th:disabled="disabled" th:field="*{factComprobacion}" style="border: 1px solid black" readonly>							        	
+							     </div>									 									
+							</div>					
+																					    
+							<div class="form-group col-md-12" align="left">
+									<input id="btnSubmit" type="submit" value="Guardar"
+										class="btn btn-success" onclick="validate()"> 
+									<input id="btnClean" type="button" value="Limpiar Campos"
+										class="btn btn-info" onclick="cleanForm()">
+								<a th:href="@{/userForm}" class="btn btn-warning btn-md" style="top:5px; height: 42px; font-size:18px"><span
+								class="glyphicon glyphicon-chevron-left" style="font-size: 18px"></span>Regresar</a>	 
+							</div>
+							
+						<input id="fotoPago" type="file" name="fotoPago" style="width: 1px;height: 1px;background: #e9e9e9;color: #e9e9e9;" accept="image/png, image/jpg" class="form-control-file">
+						<input  id="fotoLote" type="file" name="fotoLote" style="width: 1px;height: 1px;background: #e9e9e9;color: #e9e9e9;"  accept="image/png, image/jpg" class="form-control-file">								    
+															    
+					    </form>										    
+			   	</div>				
+			</div>
+	<br><br><br><br>
+	<footer class="footer" th:replace="/footer :: footer"></footer>
+	
+		<script type="text/javascript">	
+	  		
+	  	$(document).ready(function() {  		
+	  	
+	  		$('#fotoLote').change(function() {
+	  			showImageThumbnail(this);
+	  		});  	 	 		
+	  	});  	
+	  	
+	  	function showImageThumbnail(fileInput){
+	  		
+	  		file = fileInput.files[0];
+	  		reader = new FileReader();
+	  		
+	  		reader.onload = function(e) {
+	  			$('#thumbnail').attr('src', e.target.result);
+	  		};
+	  		
+	  		reader.readAsDataURL(file);
+	  	}
+	  	</script>
+  			
+		<script type="text/javascript">
+		
+		$("#numFact").keyup(function () {
+			var test = /\D/;
+		   	 if (test.test($(this).val())) {
+		    	$("#numFact").val($(this).val().replace(/\D/g, ""));
+		    }
+		});
+		
+		$("#valorPago").keyup(function () {
+			var test = /\D+(\.\D)/;
+		    if (test.test($(this).val())) {
+		    	$("#valorPago").val($(this).val().replace(/\D+(\.\D)/g, ""));
+		    }
+		});
+		
+	
+		$("#numComp").keyup(function () {
+			var test = /\D/;
+		   	 if (test.test($(this).val())) {
+		    	$("#numComp").val($(this).val().replace(/\D/g, ""));
+		    }
+		});
+			
+		$("#factReferencia").keyup(function () {
+			var test = /\D/;
+		   	 if (test.test($(this).val())) {
+		    	$("#factReferencia").val($(this).val().replace(/\D/g, ""));
+		    }
+		});
+		
+		$("#factNumLote").keyup(function () {
+			var test = /\D/;
+		   	 if (test.test($(this).val())) {
+		    	$("#factNumLote").val($(this).val().replace(/\D/g, ""));
+		    }
+		});
+		
+		$("#docFacSap").keyup(function () {
+			var test = /\D/;
+		   	 if (test.test($(this).val())) {
+		    	$("#docFacSap").val($(this).val().replace(/\D/g, ""));
+		    }
+		});
+
+		</script>
+		
+		
+		<script type="text/javascript">
+				$('#pago').on('change',function(){
+		        var selectValor = $(this).val();
+		        //alert (selectValor);
+		       		
+		        if (selectValor == '13') {
+		            $('.cedula').show();
+		        }else {
+		          $('.cedula').hide();
+		            //alert('esta es la opcion 2')
+		        }
+		    });
+		</script>
+		
+				
+		<script type="text/javascript">
+		 $(document).ready(function (){
+	        var selectValor = $('#numFact').val();
+		           //alert (selectValor);
+		       		
+		        if (selectValor > '0') {
+		           //alert (selectValor);
+		            myFunction();
+		        }
+		    });
+		</script>
+	
+		<script type="text/javascript">
+			function myFunction() {
+			  
+			  //document.getElementById("fotoPago").disabled = true;
+			  //document.getElementById("fotoLote").disabled = true;
+			}
+		</script>
+			
+		<script type="text/javascript">
+		
+		$(function validate() {
+			$("#btnSubmit")
+					.click(
+							function() {
+
+								var numFact = $("#numFact").val();
+								var numLote = $("#factNumLote").val();
+								var comp = $("#numComp").val();
+								var referencia= $("#factReferencia").val();
+								var docSap= $("#docFacSap").val();
+													
+																								
+								if (numFact == ''  && comp == '' && numLote == '' && referencia == ''
+									&& docSap == '') {	
+																					
+									swal({
+										title : "Por favor complete los campos requeridos en el formulario!!!",
+										icon : "warning",
+										button : "Ok",
+									})
+									return false;
+								}
+
+								else {
+									swal({
+										title : "Registro creado exitosamente!!!",
+										icon : "success",
+										timer: 160000000,
+										button : "Ok",
+										
+									})
+									return true;
+								}
+							});
+		});
+	
+		function cleanForm() {
+		    document.getElementById("registro_fact").reset();	    
+		}
+		
+		</script>
+	</body>
+</html>
+											
+ 							<!--<div class="form-group col-md-6">
+								<label>Constructor de la Obra</label> <input id=constObrEx
+									name="constObrEx" th:field="*{constObrEx}" type="text"
+									placeholder="ej: CONSTRUCTOR" class="form-control">
+							</div>
+							
+							<div class="form-group col-md-6">
+								<label>Cotización</label> <input id=cotizacionObrEx
+									name="cotizacionObrEx" th:field="*{cotizacionObrEx}" type="text"
+								    placeholder="ej: 9999.99" class="form-control">
+							</div>
+
+							<div class="form-group col-md-6">
+								<label>Fecha Cotización</label> <input id=fechaCotObrEx
+									name="fechaCotObrEx" th:field="*{fechaCotObrEx}" type="date"
+									class="form-control">
+							</div>
+
+							<div class="form-group col-md-6">
+								<label>Fecha de Cierre</label> <input id=fechaCieObrEx
+									name="fechaCieObrEx" th:field="*{fechaCieObrEx}" type="date"
+									class="form-control">
+							</div>
+												
+							<div class="form-group col-md-12">
+								<label>Comentarios</label>
+								<textarea id=comentObrEx name="comentObrEx"
+									th:field="*{comentObrEx}" style="height: 100px"
+									class="form-control"></textarea>
+							</div> -->	
+	

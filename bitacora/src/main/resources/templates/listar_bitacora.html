@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Bitácora Registrada</title>
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+	  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+	  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+	  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+	  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+	  <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+	  <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+	  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+	  <link rel="stylesheet" type="text/css" href="static/css/image-modal.css" th:href="@{/css/image-modal.css}"> 
+	  
+	 <style>
+		.modal modal-warning {
+	      z-index: -1;
+	     } 
+	     
+	     .modal-backdrop.fade {
+	    	z-index: -1;
+		}
+		
+		.modal-content {
+	    	width: 100% !important;
+	    }
+	    
+	</style>
+	  
+</head>
+
+<body style="background-color: #e9e9e9;">
+	
+	<div th:replace="/header :: header"> </div>
+	<div class="container mt-2">		
+		<div align="right">
+			<br>
+			<label for="search_input">Buscar:</label>
+			 <input id="search" type="text"
+				placeholder="Buscar Nombre" name="search" style="height: 26px;">
+				<span class="glyphicon glyphicon-search"></span>
+		</div>
+		<form action="#" th:action="@{/factura/filtroFecha/}" th:object="${filtro}" method="get">
+			<div align="center">
+					<br>
+						<label>Fecha Inicio:</label>
+						 <input id="startDate" type="date" name="startDate" style="height: 26px;">
+							<span class="glyphicon glyphicon-search"></span>
+							&nbsp;&nbsp;
+						
+						<label>Fecha Fin:</label>
+						 <input id="endDate" type="date" name="endDate" style="height: 26px;">
+							<span class="glyphicon glyphicon-search"></span>
+							&nbsp;&nbsp;		
+							<input type="submit" id="btnFiltro"  class="btn btn-info" style="width: 120px; height:30px" value="Filtrar">	
+							<!-- <a id="btnFiltro" th:href="@{/factura/filtroFecha/{startDate}/{endDate}(startDate = ${startDate}, endDate = ${endDate})}
+							" type="button" class="btn btn-info" style="width: 120px; height:30px">Filtrar</a> -->
+			</div>
+		</form>		
+	
+		<br>
+				
+		<div>			
+			<table id="bitacoraTable" class="table table-bordered table-hover mb-0;" style="background-color: white; margin-left: -100px;">
+				<thead>
+					<tr class="header" style="background-color: #F0C73D">
+					
+						<th style="text-align: center">CodCliente</th>
+						<th style="text-align: center">Nombre</th>
+						<th style="text-align: center">#Factura</th>
+						<th style="text-align: center">Fecha</th>
+						<th style="text-align: center">Monto Pago</th>	
+						<th style="text-align: center">Pago</th>
+						<th style="text-align: center">Foto Pago</th>						
+						<th style="text-align: center">#Comprobante</th>
+						<th style="text-align: center">#Lote</th>	
+						<th style="text-align: center">Foto Lote</th>
+						<th style="text-align: center">#Referencia</th>													
+						<th style="text-align: center">#Compensación</th>
+						<th style="text-align: center">Fecha</th>
+						<th style="text-align: center">Centro</th>
+						<th style="text-align: center">Creación</th>	
+						<th style="text-align: center">Estado</th>							
+						<!-- <th style="text-align: center">FECHA COTIZACIÓN</th>	
+						<th style="text-align: center">FECHA CIERRE</th>
+						<th style="text-align: center">COMENTARIOS</th> -->											
+						<th style="text-align: center">ACCIONES</th>
+						<!-- <th style="text-align: center">Ingresar/Ver Contacto</th> -->
+										
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="f:${factura}" align="center">
+						<td th:text="${f.cliente.codCliente}"></td>
+						<td th:text="${f.cliente.nomCliente}"></td>														
+						<td th:text="${f.numFact}"></td>			
+						<td th:text="${f.fechaFact}"></td>
+						<td th:text="${f.valorPago}"></td>
+						<td th:text="${f.pago.formaPago}"></td>
+						<td scope="row">							
+							<a data-toggle="modal" data-target="#modal-warning" th:attr="data-target='#modal-warning'+${f.idFact}">
+								<img id="myImg" alt="Pago" th:src="*{'data:image/jpg;base64,'+{f.fotoPago}}" style="width:100px; height:50px"/>
+							</a>
+							<div class="modal modal-warning fade in" th:id="modal-warning+${f.idFact}" >
+							    <div class="modal-dialog">
+							        <div class="modal-content">
+							            <div class="modal-header">
+							                <h5 style="color: white" class="modal-title">Foto Pago</h5>
+							            </div>
+							            <div class="modal-body">
+							            	<img id="myImg" alt="Pago" th:src="*{'data:image/jpg;base64,'+{f.fotoPago}}" style="width:100%; height:100%;z-index: -1;"/>
+							                
+							            </div>
+							        </div>
+							    </div>
+							</div>
+						</td>												
+						<td th:text="${f.docFacSap}"></td>
+						<td th:text="${f.factNumLote}"></td>						
+						<td scope="row">					
+						    <a data-toggle="modal" data-target="#modal-warning" th:attr="data-target='#modal-warning'+${f.idFact}+${f.numFact}">
+								<img id="myImg1"  alt="Lote" th:src="*{'data:image/jpg;base64,'+{f.fotoLote}}" style="width:100px; height:50px"/>
+							</a>
+							<div class="modal modal-warning fade in" th:id="modal-warning+${f.idFact}+${f.numFact}" >
+							    <div class="modal-dialog">
+							        <div class="modal-content">
+							            <div class="modal-header">
+							                <h5 style="color: white" class="modal-title">Foto Lote</h5>
+							            </div>
+							            <div class="modal-body">
+							            	<img id="myImg1"  alt="Lote" th:src="*{'data:image/jpg;base64,'+{f.fotoLote}}" style="width:100%; height:100%;z-index: -1;"/>
+							                
+							            </div>
+							        </div>
+							    </div>
+							</div>
+						
+						</td>	
+						<td th:text="${f.factReferencia}"></td>					
+						<td th:text="${f.numComp}"></td>
+						<td th:text="${f.fechaComp}"></td>
+						<td th:text="${f.centroFactura}"></td>
+						<td th:text="${f.createAt}"></td>
+						<td th:text="${f.factComprobacion} ? 'Comprobada' : 'En Revisión'"></td>												
+						<!-- <td th:text="${o.fechaCotObrEx}"></td>											
+						<td th:text="${o.fechaCieObrEx}"></td>
+						<td th:text="${o.comentObrEx}"></td> -->	
+														
+						<td><a th:href="@{/factura/editar/}+${f.idFact}"
+							class="btn btn-danger">Editar</a>
+						</td>
+											
+					</tr>				
+				</tbody>				
+			</table>
+			</div>							
+						
+			<div style="margin-left: -100px;">
+				<a id=btnArchivo th:href="@{/factura/facturasReport.xlsx}" class="btn btn-info"><span
+						class="glyphicon glyphicon-download-alt"></span> Generar Archivo</a>
+				<a id=btnExcel th:href="@{/factura/createExcel}" class="btn btn-info"><span
+						class="glyphicon glyphicon-download-alt"></span> Generar Excel</a>
+				<!-- <a id=btnPdf th:href="@{/obras_ex/report/pdf}" class="btn btn-info"><span
+							class="glyphicon glyphicon-download-alt"></span> Generar1 PDF</a> -->
+				<a th:href="@{/userForm}" class="btn btn-warning"><span
+						class="glyphicon glyphicon-chevron-left"></span>Regresar</a>
+			</div>
+				
+			<div align="center">
+				<div class="row" style="width:80% !important;">
+					<div class="col-md-2"></div>
+					<div class="col-md-12">
+						<nav aria-label="Pagination">
+							<ul class="pagination justify-content-center">
+								<li class="page-item" th:classappend="${prev == 0 ? 'disabled': ''}">
+									<a class="page-link" th:href="@{|/factura/bitacoraListar?page=${prev}|}">Anterior</a>
+								</li>
+								<li class="page-item" th:each="page : ${pages}" th:classappend="${current == page ? 'active': ''}">
+									<a class="page-link" th:href="@{|/factura/bitacoraListar?page=${page}|}" th:text="${page}"></a>
+								</li>
+								<li class="page-item" th:classappend="${current == last ? 'disabled': ''}">
+									<a class="page-link" th:href="@{|/factura/bitacoraListar?page=${next}|}">Siguiente</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				<div class="col-md-2"></div>
+			  </div>
+			</div>
+		</div>
+	<footer class="footer" th:replace="/footer :: footer"></footer>	
+	
+	<script th:inline='javascript'>
+	
+	var usuario =  /*[[${usuarios}]]*/;
+	
+	$(function() {
+		  $("#search").on("keyup", function() {
+		    var value = $(this).val().toLowerCase();
+		    $("#bitacoraTable > tbody > tr").filter(function() {     
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+		    });
+		  });
+		});
+			
+	</script>
+	
+	<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#btnPdf').click(function () {
+            $('#myAlert').show('fade');
+
+            setTimeout(function () {
+                $('#myAlert').hide('fade');
+            }, 100000000);
+
+        });
+
+        $('#linkClose').click(function () {
+            $('#myAlert').hide('fade');
+        });
+
+    });
+	</script>
+		
+	<script type="text/javascript">
+		// Get the modal
+		var modal = document.getElementById("myModal");
+		
+		// Get the image and insert it inside the modal - use its "alt" text as a caption
+		var img = document.getElementById("myImg");
+		var modalImg = document.getElementById("img01");
+		var captionText = document.getElementById("caption");
+		img.onclick = function(){
+		  modal.style.display = "block";
+		  modalImg.src = this.src;
+		  captionText.innerHTML = this.alt;
+		}
+		
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+		
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() { 
+		  modal.style.display = "none";
+		}
+	</script>
+	
+	<!-- <form id="editar" action="#" th:action="@{editar/}+${f.idFact}" method="get" role="form">
+			<td>
+				<input type="submit" id="btnEditar" class="btn btn-danger"
+					style="width: 60px; height: 35px" value="Editar"/>
+			</td>
+	</form> -->
+	
+	<!-- <script type="text/javascript">
+	
+		var images = document.getElementsByClassName("imageClass");
+		for(var i = 0; i < images.length; i++){
+		    var img = images[i];
+		    var modalImg = document.getElementById("img01");
+		    var captionText = document.getElementById("caption");
+		    img.onclick = function(){
+		        modal.style.display = "block";
+		        modalImg.src = this.src;
+		        modalImg.alt = this.alt;
+		        captionText.innerHTML = this.alt;
+		    }
+		}
+	</script> -->
+	
+</body>
+</html>
