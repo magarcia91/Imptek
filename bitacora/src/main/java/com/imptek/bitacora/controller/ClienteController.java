@@ -59,7 +59,78 @@ public class ClienteController {
 
 	@Autowired
 	private ClienteService clienteService;
+	
+	String codCliente;
+	
+	@GetMapping(value ="/buscarCliente")
+	public String findAllCompletos(@RequestParam Map<String, Object> params, Model model) {
+		int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+		
+		codCliente = (params.get("codCliente") != null || !"".equals(params.get("codCliente"))) ? (String.valueOf(params.get("codCliente").toString())) :null;
+		
+		if("".equals(codCliente)) {
+			codCliente=null;
+		}else {
+			codCliente=codCliente.trim();
+		}
+	
+		PageRequest pageRequest = PageRequest.of(page, 8);
+		
+		//Page<Cliente> listaClientes = clienteService.getAll(pageRequest);
+		Page<Cliente> listaClientes = clienteService.buscarDatos(pageRequest, codCliente);
+		
+		
+		int totalPage = listaClientes.getTotalPages();
+		if(totalPage > 0) {
+			List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+			model.addAttribute("pages", pages);
+		}
+		
+		model.addAttribute("cliente", listaClientes.getContent());
+		model.addAttribute("current", page + 1);
+		model.addAttribute("next", page + 2);
+		model.addAttribute("prev", page);
+		model.addAttribute("last", totalPage);
+		model.addAttribute("codCliente",codCliente);
+		
+		return "listar_cliente";
 
+	}
+	
+	@GetMapping(value ="/buscarClienteBitacora")
+	public String findAllCompletos1(@RequestParam Map<String, Object> params, Model model) {
+		int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
+		
+		codCliente = (params.get("codCliente") != null || !"".equals(params.get("codCliente"))) ? (String.valueOf(params.get("codCliente").toString())) :null;
+		
+		if("".equals(codCliente)) {
+			codCliente=null;
+		}else {
+			codCliente=codCliente.trim();
+		}
+	
+		PageRequest pageRequest = PageRequest.of(page, 8);
+		
+		//Page<Cliente> listaClientes = clienteService.getAll(pageRequest);
+		Page<Cliente> listaClientes = clienteService.buscarDatos(pageRequest, codCliente);
+		
+		
+		int totalPage = listaClientes.getTotalPages();
+		if(totalPage > 0) {
+			List<Integer> pages = IntStream.rangeClosed(1, totalPage).boxed().collect(Collectors.toList());
+			model.addAttribute("pages", pages);
+		}
+		
+		model.addAttribute("cliente", listaClientes.getContent());
+		model.addAttribute("current", page + 1);
+		model.addAttribute("next", page + 2);
+		model.addAttribute("prev", page);
+		model.addAttribute("last", totalPage);
+		model.addAttribute("codCliente",codCliente);
+		
+		return "listar_cliente_bitacora";
+
+	}
 		
 	@GetMapping("ver/{idCliente}")
 	public String ver(@PathVariable(value = "idCliente") Long idCliente, Model model, RedirectAttributes flash) {
@@ -152,8 +223,8 @@ public class ClienteController {
 	@GetMapping(value ="/clientesListar")
 	public String findAll(@RequestParam Map<String, Object> params, Model model) {
 		int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
-		
-		PageRequest pageRequest = PageRequest.of(page, 10);
+				
+		PageRequest pageRequest = PageRequest.of(page, 8);
 		
 		Page<Cliente> listaClientes = clienteService.getAll(pageRequest);
 		
@@ -177,7 +248,7 @@ public class ClienteController {
 	public String findAll1(@RequestParam Map<String, Object> params, Model model) {
 		int page = params.get("page") != null ? (Integer.valueOf(params.get("page").toString()) - 1) : 0;
 		
-		PageRequest pageRequest = PageRequest.of(page, 10);
+		PageRequest pageRequest = PageRequest.of(page, 8);
 		
 		Page<Cliente> listaClientes = clienteService.getAll(pageRequest);
 		

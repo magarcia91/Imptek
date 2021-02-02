@@ -18,7 +18,7 @@
 	  
 	 <style>
 		.modal modal-warning {
-	      z-index: -1;
+	        z-index: -1;
 	     } 
 	     
 	     .modal-backdrop.fade {
@@ -30,6 +30,7 @@
 	    }
 	    
 	</style>
+	
 	  
 </head>
 
@@ -37,15 +38,21 @@
 	
 	<div th:replace="/header :: header"> </div>
 	<div class="container mt-2">		
-		<div align="right">
-			<br>
-			<label for="search_input">Buscar:</label>
-			 <input id="search" type="text"
-				placeholder="Buscar Nombre" name="search" style="height: 26px;">
-				<span class="glyphicon glyphicon-search"></span>
-		</div>
-		<form action="#" th:action="@{/factura/filtroFecha/}" th:object="${filtro}" method="get">
-			<div align="center">
+	
+		
+		<form th:action="@{/factura/buscarCliente}" th:object="${factura}" method="get"  style="position: fixed">
+			<div style="margin-left: 1000px; margin-top: 20px">
+							<label for="factCliente">Código Cliente:</label>
+							<input id="factCliente" type="text" placeholder="Ingrese el código" name="codCliente" th:value="${codCliente}" style="height: 26px;">							
+					
+							<input type="submit" value="Buscar" class="btn btn-primary"/>
+							&nbsp;
+							<input type="button" value="Limpiar"  class="btn  btn-info" id="btnClear" onclick="clearSearch()" />
+			</div>
+		</form>	
+		
+		<form action="#" th:action="@{/factura/filtroFecha/}" th:object="${filtro}" method="get"  style="position: fixed">
+			<div align="center" style="margin-left: 30px">
 					<br>
 						<label>Fecha Inicio:</label>
 						 <input id="startDate" type="date" name="startDate" style="height: 26px;">
@@ -58,14 +65,26 @@
 							&nbsp;&nbsp;		
 							<input type="submit" id="btnFiltro"  class="btn btn-info" style="width: 120px; height:30px" value="Filtrar">	
 							<!-- <a id="btnFiltro" th:href="@{/factura/filtroFecha/{startDate}/{endDate}(startDate = ${startDate}, endDate = ${endDate})}
-							" type="button" class="btn btn-info" style="width: 120px; height:30px">Filtrar</a> -->
+							" type="button" class="btn btn-info" style="width: 120px; height:30px">Filtrar</a> -->					
+					
+						<!-- <label for="search_input" style=" margin-left: 100px">Buscar:</label> <input id="search"
+							type="text" placeholder="Buscar Nombre" name="search"
+							style="height: 26px;"> <span
+						class="glyphicon glyphicon-search"></span> -->
+
+						<!-- <div align="center" style="position: relative">		
+						<label for="search_input">Buscar:</label>
+						 <input id="search" type="text"
+							placeholder="Buscar Nombre" name="search" style="height: 26px;">
+							<span class="glyphicon glyphicon-search"></span>
+					   </div> -->
 			</div>
-		</form>		
-	
-		<br>
+		</form>	
+
+		<br><br><br>
 				
 		<div>			
-			<table id="bitacoraTable" class="table table-bordered table-hover mb-0;" style="background-color: white; margin-left: -100px;">
+			<table id="bitacoraTable" class="table-responsive-xl table-bordered table-hover table-condensed mb-0;" style="background-color: white; margin-left: -200px; position: relative">
 				<thead>
 					<tr class="header" style="background-color: #F0C73D">
 					
@@ -84,11 +103,14 @@
 						<th style="text-align: center">Fecha</th>
 						<th style="text-align: center">Centro</th>
 						<th style="text-align: center">Creación</th>	
-						<th style="text-align: center">Estado</th>							
+						<th style="text-align: center">Depósito</th>
+						<th style="text-align: center">Pronto Pago</th>
+						<th style="text-align: center">Valor</th>
+						<th style="text-align: center">ACCIONES</th>
+														
 						<!-- <th style="text-align: center">FECHA COTIZACIÓN</th>	
 						<th style="text-align: center">FECHA CIERRE</th>
-						<th style="text-align: center">COMENTARIOS</th> -->											
-						<th style="text-align: center">ACCIONES</th>
+						<th style="text-align: center">COMENTARIOS</th> -->														
 						<!-- <th style="text-align: center">Ingresar/Ver Contacto</th> -->
 										
 					</tr>
@@ -146,35 +168,56 @@
 						<td th:text="${f.fechaComp}"></td>
 						<td th:text="${f.centroFactura}"></td>
 						<td th:text="${f.createAt}"></td>
-						<td th:text="${f.factComprobacion} ? 'Comprobada' : 'En Revisión'"></td>												
+						<td th:text="${f.factComprobacion} ? 'Comprobada' : 'En Revisión'"></td>
+						<td th:text="${f.ppago.tipoAccion}"></td>
+						<td th:text="${f.valorPPago}"></td>
+						<!-- <td>
+							<input type="checkbox"
+						           th:value="${f.factEstado}"/>
+						</td> -->
 						<!-- <td th:text="${o.fechaCotObrEx}"></td>											
 						<td th:text="${o.fechaCieObrEx}"></td>
 						<td th:text="${o.comentObrEx}"></td> -->	
-														
-						<td><a th:href="@{/factura/editar/}+${f.idFact}"
-							class="btn btn-danger">Editar</a>
-						</td>
-											
+												
+						<td th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}">
+							<form id="editar" action="#" th:action="@{/factura/editar/}+${f.idFact}" method="get">
+								<button th:case="${#authorization.expression('hasRole(''ROLE_ASIST'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}" th:disabled="disabled" style="width: 63px; height: 35px" value="Editar" class="btn btn-danger">Editar</button>
+							</form>
+							
+							<form id="editar" action="#" th:action="@{/factura/editar/}+${f.idFact}" method="get">
+								<button th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_FINAN'')') }" style="width: 63px; height: 35px" value="Editar" class="btn btn-danger">Editar</button>
+							</form>
+						<!-- <a th:href="@{/factura/editar/}+${f.idFact}" class="btn btn-danger">Editar</a>	 -->						
+						</td> 
+						<!-- <form id="registro_fact" th:action="@{/factura/save}"
+							th:object=${factura} method="POST" enctype="multipart/form-data" class="row justify-content-center">	
+							<td>
+							<input type="submit" id="btnAnular"  class="btn btn-primary" style="width: 65px; height:35px" value="Anular">					
+							</td>
+						</form> -->		
 					</tr>				
 				</tbody>				
 			</table>
-			</div>							
-						
-			<div style="margin-left: -100px;">
-				<a id=btnArchivo th:href="@{/factura/facturasReport.xlsx}" class="btn btn-info"><span
-						class="glyphicon glyphicon-download-alt"></span> Generar Archivo</a>
-				<a id=btnExcel th:href="@{/factura/createExcel}" class="btn btn-info"><span
-						class="glyphicon glyphicon-download-alt"></span> Generar Excel</a>
-				<!-- <a id=btnPdf th:href="@{/obras_ex/report/pdf}" class="btn btn-info"><span
-							class="glyphicon glyphicon-download-alt"></span> Generar1 PDF</a> -->
+			</div>	
+									
+			<br>			
+			<div style="margin-left: -200px;">
+				
+				<a id=btnExcel th:href="@{/factura/facturasReport}" class="btn btn-info"><span
+						class="glyphicon glyphicon-download-alt"></span> Generar Excel</a>		
 				<a th:href="@{/userForm}" class="btn btn-warning"><span
 						class="glyphicon glyphicon-chevron-left"></span>Regresar</a>
+												
+				<!-- <a id=btnArchivo th:href="@{/factura/facturasReport.xlsx}" class="btn btn-info"><span
+						class="glyphicon glyphicon-download-alt"></span> Generar Archivo</a> -->
+				<!-- <a id=btnPdf th:href="@{/obras_ex/report/pdf}" class="btn btn-info"><span
+							class="glyphicon glyphicon-download-alt"></span> Generar1 PDF</a> -->
 			</div>
 				
-			<div align="center">
-				<div class="row" style="width:80% !important;">
+			<div align="center" style="margin-top: -17px; position: fixed">
+				<div class="row" style="width:100% !important;">
 					<div class="col-md-2"></div>
-					<div class="col-md-12">
+					<div class="col-md-16">
 						<nav aria-label="Pagination">
 							<ul class="pagination justify-content-center">
 								<li class="page-item" th:classappend="${prev == 0 ? 'disabled': ''}">
@@ -189,7 +232,7 @@
 							</ul>
 						</nav>
 					</div>
-				<div class="col-md-2"></div>
+				<!-- <div class="col-md-2"></div> -->
 			  </div>
 			</div>
 		</div>
@@ -251,6 +294,21 @@
 		  modal.style.display = "none";
 		}
 	</script>
+	
+	<script>
+	  // your custom ajax request here
+	  function ajaxRequest(params) {
+	    var url = 'https://examples.wenzhixin.net.cn/examples/bootstrap_table/data'
+	    $.get(url + '?' + $.param(params.data)).then(function (res) {
+	      params.success(res)
+	    })
+	  }
+	  
+	  function clearSearch() {
+			window.location = "[[@{/factura/bitacoraListar}]]";
+		}
+	  
+	</script>	
 	
 	<!-- <form id="editar" action="#" th:action="@{editar/}+${f.idFact}" method="get" role="form">
 			<td>

@@ -13,6 +13,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotEmpty;
+
 
 
 @Entity
@@ -24,7 +26,6 @@ public class Factura implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idFact;
-	
 	private String numFact;
 	private Date fechaFact;	
 	private String numComp;		
@@ -33,27 +34,37 @@ public class Factura implements Serializable {
 	private String factNumLote;
 	private String factReferencia;
 	private Double valorPago;
+	private Double valorPPago;
 	@Lob
 	private String fotoLote;
 	@Lob
 	private String fotoPago;	
 	private String centroFactura; 
 	private boolean factComprobacion;
+	//private boolean factEstado;
+	//private boolean factCatalogo;
 	private Date createAt;
 	
-
+	/*@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id")
+	private Catalogos catalogos;*/
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Cliente cliente;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idPago")
 	private Pago pago;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "idAccion")
+	private ProntoPago ppago;
 	    
 	@Transient
 	private String boLote,boNumLote;
 	
 	@Transient
-	private String boPago,boRef;
+	private String boPago,boPPago,boRef;
 
 	
 /*	@OneToMany(mappedBy="factura")
@@ -71,8 +82,8 @@ public class Factura implements Serializable {
 
 	
 	public Factura(Long idFact, String numFact, Date fechaFact, String numComp, Date fechaComp,
-			String docFacSap, String factNumLote, String factReferencia,Double valorPago, String fotoLote, String fotoPago, String centroFactura,
-			boolean factComprobacion, Date createAt, Cliente cliente, Pago pago) {
+			String docFacSap, String factNumLote, String factReferencia,Double valorPago,Double valorPPago,String fotoLote, String fotoPago, String centroFactura,
+			boolean factComprobacion, Date createAt, Cliente cliente, Pago pago,ProntoPago ppago) {
 		
 		this.idFact = idFact;
 		this.numFact = numFact;
@@ -83,13 +94,17 @@ public class Factura implements Serializable {
 		this.factNumLote = factNumLote;
 		this.factReferencia = factReferencia;
 		this.valorPago = valorPago;
+		this.valorPPago = valorPPago;
 		this.fotoLote = fotoLote;
 		this.fotoPago = fotoPago;
 		this.centroFactura = centroFactura;
 		this.factComprobacion = factComprobacion;
+		//this.factEstado = factEstado;
+		//this.factCatalogo = factCatalogo;
 		this.createAt = createAt;
 		this.cliente = cliente;
 		this.pago = pago;
+		this.ppago = ppago;
 	}
 
 
@@ -169,6 +184,16 @@ public class Factura implements Serializable {
 		this.pago = pago;
 	}
 
+	
+	public ProntoPago getPpago() {
+		return ppago;
+	}
+
+
+	public void setPpago(ProntoPago ppago) {
+		this.ppago = ppago;
+	}
+
 
 	public String getFactNumLote() {
 		return factNumLote;
@@ -197,6 +222,15 @@ public class Factura implements Serializable {
 
 	public void setValorPago(Double valorPago) {
 		this.valorPago = valorPago;
+	}
+	
+	public Double getValorPPago() {
+		return valorPPago;
+	}
+
+
+	public void setValorPPago(Double valorPPago) {
+		this.valorPPago = valorPPago;
 	}
 
 
@@ -239,7 +273,6 @@ public class Factura implements Serializable {
 		this.factComprobacion = factComprobacion;
 	}
 
-
 	public String getBoLote() {
 		return boLote;
 	}
@@ -257,6 +290,16 @@ public class Factura implements Serializable {
 
 	public void setBoPago(String boPago) {
 		this.boPago = boPago;
+	}
+
+	
+	public String getBoPPago() {
+		return boPPago;
+	}
+
+
+	public void setBoPPago(String boPPago) {
+		this.boPPago = boPPago;
 	}
 
 
@@ -279,7 +322,25 @@ public class Factura implements Serializable {
 		this.boRef = boRef;
 	}
 
-	
+
+/*	public boolean isFactEstado() {
+		return factEstado;
+	}
+
+
+	public void setFactEstado(boolean factEstado) {
+		this.factEstado = factEstado;
+	}*/
+
+		
+/*	public boolean isFactCatalogo() {
+		return factCatalogo;
+	}
+
+
+	public void setFactCatalogo(boolean factCatalogo) {
+		this.factCatalogo = factCatalogo;
+	}*/
 				
 /*	public List<ItemFactura> getItems() {
 		return items;

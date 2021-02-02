@@ -89,6 +89,11 @@ public class ClienteServiceImpl implements ClienteService {
 		return clienteRepository.findByCodCliente(codCliente);
 	}
 
+	@Override
+	public Page<Cliente> buscarDatos(Pageable pageable, String codCliente) {
+		return (Page<Cliente>) clienteRepository.buscarDatos(pageable, codCliente);
+	}
+
 /*	@Override
 	public boolean checkClientExist(Cliente cliente) throws Exception {
 	

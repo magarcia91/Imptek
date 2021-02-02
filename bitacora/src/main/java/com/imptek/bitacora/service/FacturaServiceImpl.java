@@ -3,7 +3,7 @@ package com.imptek.bitacora.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.servlet.ServletContext;
@@ -13,23 +13,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.usermodel.HSSFHeader;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.CreationHelper;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.imptek.bitacora.entity.Cliente;
 import com.imptek.bitacora.entity.Factura;
 import com.imptek.bitacora.repository.FacturaRepository;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.Header;
 
 @Service
 public class FacturaServiceImpl implements FacturaService {
@@ -60,7 +55,7 @@ public class FacturaServiceImpl implements FacturaService {
 	    	   FileOutputStream outputStream = new FileOutputStream(file+"/"+"facturas"+".xls");
 	    	   HSSFWorkbook workbook = new HSSFWorkbook();
 	    	   HSSFSheet workSheet = workbook.createSheet("Facturas");
-	    	   workSheet.setDefaultColumnWidth(30);
+	    	   workSheet.setDefaultColumnWidth(20);
 	    
 	    	   
 	    	   HSSFCellStyle headerCellStyle = workbook.createCellStyle();
@@ -89,13 +84,64 @@ public class FacturaServiceImpl implements FacturaService {
 	    	   fechaFactura.setCellValue("Fecha");
 	    	   fechaFactura.setCellStyle(headerCellStyle);
 	    	   
+	    	   HSSFCell montoPago = headerRow.createCell(4);
+	    	   montoPago.setCellValue("Monto");
+	    	   montoPago.setCellStyle(headerCellStyle);
+	    	   
+	    	   HSSFCell formaPago = headerRow.createCell(5);
+	    	   formaPago.setCellValue("Pago");
+	    	   formaPago.setCellStyle(headerCellStyle);
+	    	   
+	    	   HSSFCell docFacSap = headerRow.createCell(6);
+	    	   docFacSap.setCellValue("#Comprobante");
+	    	   docFacSap.setCellStyle(headerCellStyle);
+	    	   	    	   
+	    	   HSSFCell numLote = headerRow.createCell(7);
+	    	   numLote.setCellValue("#Lote");
+	    	   numLote.setCellStyle(headerCellStyle);
+	    	   	    	   
+	    	   HSSFCell factReferencia = headerRow.createCell(8);
+	    	   factReferencia.setCellValue("#Referencia");
+	    	   factReferencia.setCellStyle(headerCellStyle);
+	    	   
+	    	   HSSFCell numComp = headerRow.createCell(9);
+	    	   numComp.setCellValue("#Compensación");
+	    	   numComp.setCellStyle(headerCellStyle);
+	    	   
+	    	   HSSFCell fechaComp = headerRow.createCell(10);
+	    	   fechaComp.setCellValue("Fecha");
+	    	   fechaComp.setCellStyle(headerCellStyle);
+	    	   
+	    	   HSSFCell centroFactura = headerRow.createCell(11);
+	    	   centroFactura.setCellValue("Centro");
+	    	   centroFactura.setCellStyle(headerCellStyle);
+	    	   
+	    	   /*HSSFCell fechaCreacion = headerRow.createCell(12);
+	    	   fechaCreacion.setCellValue("Creación");
+	    	   fechaCreacion.setCellStyle(headerCellStyle);*/
+	    	   
+	    	   HSSFCell estadoFactura = headerRow.createCell(12);
+	    	   estadoFactura.setCellValue("Depósito");
+	    	   estadoFactura.setCellStyle(headerCellStyle);
+	    	   
+	    	  /* HSSFCell prontoPago = headerRow.createCell(13);
+	    	   prontoPago.setCellValue("Pronto Pago");
+	    	   prontoPago.setCellStyle(headerCellStyle);*/
+	    	   	    	   
+	    	   HSSFCell valorProntoPago = headerRow.createCell(13);
+	    	   valorProntoPago.setCellValue("Subtotal");
+	    	   valorProntoPago.setCellStyle(headerCellStyle);
+	    	   
+	    	  	    	   
 	    	   int i = 1;
 	    	   for (Factura factura : facturas) {
 	    		   
+	    		   String s,s1,s2,s3,s4;
 	    		   HSSFRow bodyRow = workSheet.createRow(i);
 	    		   
 	    		   HSSFCellStyle bodyCellStyle = workbook.createCellStyle();
 	    		   bodyCellStyle.setFillForegroundColor(HSSFColor.WHITE.index);
+	    		   bodyCellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 	    		    		   
 	    		   HSSFCell  codClienteValue = bodyRow.createCell(0);
 	    		   codClienteValue.setCellValue(factura.getCliente().getCodCliente());
@@ -113,9 +159,57 @@ public class FacturaServiceImpl implements FacturaService {
 	    		   
 	    		   
 	    		   HSSFCell  fechaFacturaValue = bodyRow.createCell(3);
-	    		   fechaFacturaValue.setCellValue(factura.getFechaFact().toString());
+	    		   fechaFacturaValue.setCellValue(s=String.valueOf(factura.getFechaFact()));
 	    		   fechaFacturaValue.setCellStyle(bodyCellStyle);
 	    		   
+	    		   HSSFCell  montoPagoValue = bodyRow.createCell(4);
+	    		   montoPagoValue.setCellValue(s=String.valueOf(factura.getValorPago()));
+	    		   montoPagoValue.setCellStyle(bodyCellStyle);
+	    		   
+	    		   HSSFCell  formaPagoValue = bodyRow.createCell(5);
+	    		   formaPagoValue.setCellValue(factura.getPago().getFormaPago());
+	    		   formaPagoValue.setCellStyle(bodyCellStyle);
+	    		   
+	    		   HSSFCell  docFacSapValue = bodyRow.createCell(6);
+	    		   docFacSapValue.setCellValue(factura.getDocFacSap());
+	    		   docFacSapValue.setCellStyle(bodyCellStyle);
+	    		   
+	    		   HSSFCell  numLoteValue = bodyRow.createCell(7);
+	    		   numLoteValue.setCellValue(factura.getFactNumLote());
+	    		   numLoteValue.setCellStyle(bodyCellStyle);
+	    		   
+	    		   HSSFCell  factReferenciaValue = bodyRow.createCell(8);
+	    		   factReferenciaValue.setCellValue(factura.getFactReferencia());
+	    		   factReferenciaValue.setCellStyle(bodyCellStyle);
+	    		   
+	     		   HSSFCell numCompValue = bodyRow.createCell(9);
+	     		   numCompValue.setCellValue(factura.getNumComp());
+	     		   numCompValue.setCellStyle(bodyCellStyle);
+	     		   
+	     		   HSSFCell fechaCompValue = bodyRow.createCell(10);
+	     		   fechaCompValue.setCellValue(s=String.valueOf(factura.getFechaComp()));
+	     		   fechaCompValue.setCellStyle(bodyCellStyle);
+	     		   
+	     		   HSSFCell centroFacturaValue = bodyRow.createCell(11);
+	     		   centroFacturaValue.setCellValue(factura.getCentroFactura());
+	     		   centroFacturaValue.setCellStyle(bodyCellStyle);
+	    		   
+	     		  /*HSSFCell fechaCreacionValue = bodyRow.createCell(12);
+	     		   fechaCreacionValue.setCellValue(s=String.valueOf(factura.getCreateAt().toString()));
+	     		   fechaCreacionValue.setCellStyle(bodyCellStyle);*/
+	     		   
+	     		   HSSFCell estadoFacturaValue = bodyRow.createCell(12);
+	     		   estadoFacturaValue.setCellValue(factura.isFactComprobacion());
+	     		   estadoFacturaValue.setCellStyle(bodyCellStyle);
+	     		   
+	     		  /* HSSFCell prontoPagoValue = bodyRow.createCell(13);
+	     		   prontoPagoValue.setCellValue(factura.getPpago().getTipoAccion());
+	     		   prontoPagoValue.setCellStyle(bodyCellStyle);*/
+	     		   
+	     		   HSSFCell valorProntoPagoValue = bodyRow.createCell(13);
+	     		   valorProntoPagoValue.setCellValue(s1=String.valueOf(factura.getValorPPago()));
+	     		   valorProntoPagoValue.setCellStyle(bodyCellStyle);
+	    		 
 	    		   i++;
 				
 	    	   }
@@ -131,6 +225,11 @@ public class FacturaServiceImpl implements FacturaService {
 	    	  return false;
 		}		 
 		
+	}
+
+	@Override
+	public Page<Factura> buscarDatos(Pageable pageable, String codCliente) {
+		return (Page<Factura>) facturaRepository.buscarDatos(pageable, codCliente);
 	}
 
 }

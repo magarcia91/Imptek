@@ -1,5 +1,5 @@
 <div th:fragment="header">
-<nav class="navbar navbar" style="background-color: #1AACE7 ;">
+<nav class="navbar navbar" style="background-color: #1AACE7; width: 180% ">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -27,7 +27,7 @@
 									Registrar Usuario</a></li>
 									
 							<li role="separator" class="divider"></li> -->
-					<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}"><a href="/listaUsr" style="color:#000000"><span
+					<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}"><a href="/bitacora-1.0/listaUsr" style="color:#000000"><span
 									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Listar Usuarios</a></li>
 						</ul></li>
 						
@@ -37,10 +37,12 @@
 						aria-expanded="false" style="color:#000000">Clientes <span class="caret"></span></a>
 						<ul class="dropdown-menu">					
 				
-					<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}"><a href="/cliente/new" style="color:#000000"><span
+					<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><a href="/cliente/new" style="color:#000000"><span
 									class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span> Registrar Clientes</a></li>
 									
-					<li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}" role="separator" class="divider"></li>
+					<li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" role="separator" class="divider"></li>	
+									
+					<li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}"></li>
 									<li><a href="/cliente/clientesListar" style="color:#000000"><span
 									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Listar Clientes</a></li>
 						</ul></li>							
@@ -61,7 +63,7 @@
 							<!-- <li role="separator" class="divider"></li> -->		
 																		
 						</ul></li>
- 					<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_ASIST'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}" 
+ 					<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" 
  						class="dropdown"><a href="#" class="dropdown-toggle"
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false" style="color:#000000">Registrar Datos <span class="caret"></span></a>
@@ -79,9 +81,9 @@
 						data-toggle="dropdown" role="button" aria-haspopup="true"
 						aria-expanded="false" style="color:#000000"><span class="glyphicon glyphicon-user"
 							aria-hidden="true"></span><span style="text-transform:uppercase" th:text="${#authentication.getPrincipal().getUsername()}"></span><span class="caret"></span></a>
-						<ul class="dropdown-menu">
-							<li><a href="listar" target="_blank" style="color:#000000"><span
-									class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configuracion Usuario</a></li>
+						<ul class="dropdown-menu">		
+							<!-- <li><a href="/" target="_blank" style="color:#000000"><span
+									class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configuracion Usuario</a></li> -->								
 							<li><a href="/"><span	class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
 									Cerrar Sesion</a></li>
 						</ul></li>

@@ -5,6 +5,9 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 import com.imptek.bitacora.entity.Cliente;
 import com.imptek.bitacora.entity.Factura;
 
@@ -14,8 +17,6 @@ public interface ClienteService {
 
 	Page<Cliente> getAll(Pageable pageable);
 	
-	/*Page<Cliente> getAll1(Pageable pageable);*/
-	
 	void save(Cliente cliente);
 
 	public Cliente findOne(Long idCliente);
@@ -24,13 +25,7 @@ public interface ClienteService {
 
 	public void delete(Long idCliente);
 	
-	//public boolean checkClientExist(Cliente cliente) throws Exception;
-	
-	//public List<Producto> findByNombre(String term);
-	
 	public void saveFactura(Factura factura);
-	
-	//public Producto findProductoByid(Long id);
 	
 	public Factura findFacturaById(Long idFact);
 	
@@ -39,4 +34,12 @@ public interface ClienteService {
 	public Factura fetchByIdWithItemFacturaWithProducto(Long id);
 	
 	public Cliente fetchByIdWithFacturas(Long idCliente);
+	
+	@Query("SELECT c FROM Cliente c WHERE (:codCliente is null or c.codCliente = :codCliente)")
+	Page<Cliente> buscarDatos(Pageable pageable,@Param("codCliente")String codCliente);
+	
+	//Page<Cliente> getAll1(Pageable pageable);
+	//public boolean checkClientExist(Cliente cliente) throws Exception;	
+	//public List<Producto> findByNombre(String term);
+	//public Producto findProductoByid(Long id);
 }

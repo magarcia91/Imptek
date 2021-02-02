@@ -19,11 +19,21 @@
 	<div class="container mt-4">	
 		<div align="right">
 		<br>
-			<label for="search_input">Buscar:</label>
+		<!-- 	<label for="search_input">Buscar:</label>
 			 <input id="search" type="text"
 				placeholder="Buscar Nombre" name="search" style="height: 26px;">
 				<span class="glyphicon glyphicon-search"></span>
-		</div>	
+		</div> -->	
+			
+			<form th:action="@{/cliente/buscarClienteBitacora}">
+							<label for="cliente">Código Cliente:</label>
+							<input id="cliente" type="text" placeholder="Ingrese el código" name="codCliente" th:value="${codCliente}" style="height: 26px;">							
+					
+							<input type="submit" value="Buscar" class="btn btn-primary"/>
+							&nbsp;
+							<input type="button" value="Limpiar"  class="btn  btn-info" id="btnClear" onclick="clearSearch()" />
+			</form>
+		</div>
 		<br>
 								
 		<div id="myAlert" class="alert alert-success collapse">
@@ -47,7 +57,7 @@
 						<th style="text-align: center">Cédula/RUC</th>						
 						<th style="text-align: center">Línea Cliente</th>				
 						<th style="text-align: center">BITÁCORA</th>										
-						<th style="text-align: center">ACCIONES</th>
+						<!-- <th style="text-align: center">ACCIONES</th> -->
 						<!-- <th style="text-align: center">FECHA COTIZACIÓN</th>	
 						<th style="text-align: center">FECHA CIERRE</th>
 						<th style="text-align: center">COMENTARIOS</th> -->	
@@ -68,12 +78,12 @@
 						<td th:text="${o.comentObrEx}"></td> -->											
 														
 						<td><a th:href="@{/factura/new/}+${c.idCliente}"
-							class="btn btn-info">Crear Bitácora</a>
+							class="btn btn-success">Crear Bitácora</a>
 						</td>
 						
-						<td><a th:href="@{/cliente/editar/}+${c.idCliente}"
+						<!-- <td><a th:href="@{/cliente/editar/}+${c.idCliente}"
 							class="btn btn-warning">Editar</a>
-						</td>				
+						</td> -->				
 															
 					</tr>				
 				</tbody>				
@@ -145,6 +155,21 @@
         });
 
     });
+	</script>	
+	
+	<script>
+	  // your custom ajax request here
+	  function ajaxRequest(params) {
+	    var url = 'https://examples.wenzhixin.net.cn/examples/bootstrap_table/data'
+	    $.get(url + '?' + $.param(params.data)).then(function (res) {
+	      params.success(res)
+	    })
+	  }
+	  
+	  function clearSearch() {
+			window.location = "[[@{/cliente/clientesBitacoraListar}]]";
+		}
+	  
 	</script>	
 			
 
