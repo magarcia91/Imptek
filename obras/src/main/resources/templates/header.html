@@ -1,0 +1,92 @@
+<div th:fragment="header">
+<nav class="navbar navbar" style="background-color: #1AACE7 ;">
+		<div class="container-fluid">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed"
+					data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+					aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span> <span
+						class="icon-bar"></span> <span class="icon-bar"></span> <span
+						class="icon-bar"></span>
+				</button>
+			 	<a class="navbar-brand" href="#" style="color:#000000">&Aacute;rea Comercial</a>
+			</div> 
+
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse"
+				id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav">					
+					<li th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false" style="color:#000000">Usuarios <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							
+						<!-- 	<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><a href="/signup"  style="color:#000000"><span
+									class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+									Registrar Usuario</a></li>
+									
+							<li role="separator" class="divider"></li> -->
+					<li  th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}"><a href="/obras-1.0/listaUsr" style="color:#000000"><span
+									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Listar Usuarios</a></li>
+						</ul></li>
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false" style="color:#000000">Contactos<span class="caret"></span></a>
+						<ul class="dropdown-menu">
+									
+						<!-- <li role="separator" class="divider"></li>	 									
+						<li  th:if="${!#authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}"><a href="/obras-1.0/contacto_ex/new" style="color:#000000"><span
+									class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+									Registro de Contacto Obras Externas</a></li>-->
+									
+							<!-- <li role="separator" class="divider"></li> -->
+							<li><a href="/obras-1.0/contacto/contactoListar" style="color:#000000"><span
+									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Listar Contactos Obras Imptek</a></li>
+							<li role="separator" class="divider"></li>
+							<li><a href="/obras-1.0/contacto_ex/contExListar" style="color:#000000"><span
+									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Listar Contactos Obras Externas</a></li>										
+						</ul></li>
+ 					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false" style="color:#000000">Obras <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li  th:if="${!#authorization.expression('hasRole(''ROLE_USER'')')}"><a href="/obras-1.0/obras_ex/new" style="color:#000000"><span
+									class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span>
+									Registrar Obras Externas</a></li>
+																		
+								<li role="separator" class="divider"></li>
+									<li><a href="/obras-1.0/detalle/obraLista" style="color:#000000"><span
+									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Listar Obras Imptek</a></li>
+						 							
+								<li role="separator" class="divider"></li>
+									<li><a href="/obras-1.0/obras_ex/obraExListar" style="color:#000000"><span
+									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Listar Obras Externas</a></li>
+									
+								<li role="separator" class="divider"></li>
+									<li><a href="/obras-1.0/contacto/avance" style="color:#000000"><span
+									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Obras Cerradas Imptek</a></li>
+									
+								<li role="separator" class="divider"></li>
+									<li><a href="/obras-1.0/contacto_ex/avance" style="color:#000000"><span
+									class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Obras Cerradas Externas</a></li>
+						</ul></li> 
+				</ul>
+				<ul class="nav navbar-nav navbar-right">
+		
+					<li class="dropdown"><a href="#" class="dropdown-toggle"
+						data-toggle="dropdown" role="button" aria-haspopup="true"
+						aria-expanded="false" style="color:#000000"><span class="glyphicon glyphicon-user"
+							aria-hidden="true"></span><span style="text-transform:uppercase" th:text="${#authentication.getPrincipal().getUsername()}"></span><span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							<li><a href="listar" target="_blank" style="color:#000000"><span
+									class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configuracion Usuario</a></li>
+							<li><a href="/obras-1.0/"><span
+									class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
+									Cerrar Sesion</a></li>
+						</ul></li>
+				</ul>
+			</div>			
+		</div>		
+	</nav>
+</div>

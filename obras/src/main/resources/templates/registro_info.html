@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"  xmlns:sd="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="UTF-8">
+<title>Registro Contacto</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2017/conic-gradient.js"></script> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.js"></script>   
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
+</head>
+<body style="background-color: #FFFFFF;">
+
+    <div th:replace="/header :: header"> </div>
+
+	<div class="container mt-4">
+		<div class="col-md-5">
+			<form id="registro_info" th:action="@{/api/contacto/save}" th:object=${contacto} method="POST">
+				<div class="card h-180" align="left" style="position: relative; left:35px;">
+					<div class="card-header">
+						<h3>Registrar Contacto</h3>
+					</div>
+					<div class="card-body" align="center">
+						<div class="form-group col-8">
+							<input th:field="*{idContact}" type="hidden" class="form-control">							
+						</div>
+						
+						<div class="form-group col-8">
+							<input th:field="*{idObr}" type="hidden" class="form-control">							
+						</div>
+						
+						<div class="form-group col-8">
+
+							<select class="form-control" id="ciudad"
+								name="contactoCiudadObr">
+								<option value="">Seleccione la ciudad</option>
+								<option th:each="test : ${tests}" th:value="${test.ciudadObr}"
+									th:text="${test.ciudadObr}"></option>
+							</select>
+
+						</div>
+				
+						
+						<div class="form-group col-8">
+
+							<select class="form-control" id="proyecto" name="contactoProyectoObr">
+								<option value="">Seleccione el proyecto</option>
+								<option th:each="test : ${tests}" th:value="${test.nombreObr}"
+									th:text="${test.nombreObr}">								
+								</option>
+							</select>							
+						</div>	
+													
+						<div class="form-group col-8">
+
+							<select class="form-control" id="zona"
+								name="contactoZonaObr">
+								<option value="">Seleccione la zona</option>
+								<option th:each="test : ${tests}" th:value="${test.zonaObr}"
+									th:text="${test.zonaObr}"></option>
+							</select>
+
+						</div>
+						
+										
+						<div class="form-group col-8">
+
+							<select class="form-control" id="sector"
+								name="contactoSectorObr">
+								<option value="">Seleccione el sector</option>
+								<option th:each="test : ${tests}" th:value="${test.sectorObr}"
+									th:text="${test.sectorObr}"></option>
+							</select>
+
+						</div>
+
+						<div class="form-group col-8">
+
+							<select class="form-control" id="status"
+								name="contactoStatusObr">
+								<option value="">Seleccione el estado</option>
+								<option th:each="test : ${tests}" th:value="${test.statusObr}"
+									th:text="${test.statusObr}"></option>
+							</select>
+
+						</div>
+						
+						
+						<div class="form-group col-8">
+
+							<select class="form-control" id="constructora"
+								name="contactoConstructoraObr">
+								<option value="">Seleccione el constructor</option>
+								<option th:each="test : ${tests}"
+									th:value="${test.constructoraObr}"
+									th:text="${test.constructoraObr}"></option>
+							</select>
+
+						</div>	
+						
+						<div class="form-group col-8">
+							<select class="form-control" id="porcentajeObras"
+								th:field="*{contactoAvanceObr}">
+								<option value="0">Seleccione el avance</option>
+								<option th:value="0+'%'" th:text="'0%'"></option>
+								<option th:value="10+'%'" th:text="'10%'"></option>
+								<option th:value="20+'%'" th:text="'20%'"></option>
+								<option th:value="30+'%'" th:text="'30%'"></option>
+								<option th:value="40+'%'" th:text="'40%'"></option>
+								<option th:value="50+'%'" th:text="'50%'"></option>
+								<option th:value="60+'%'" th:text="'60%'"></option>
+								<option th:value="70+'%'" th:text="'70%'"></option>
+								<option th:value="80+'%'" th:text="'80%'"></option>
+								<option th:value="90+'%'" th:text="'90%'"></option>
+								<option th:value="100+'%'" th:text="'100%'"></option>
+							</select>
+						</div>
+
+						<div class="form-group col-8" align="left">
+							<label>Nombre del Contacto</label> <input id=contacto
+								th:field="*{nombreContact}" type="text" class="form-control">
+						</div>
+
+						<div class="form-group col-8" align="left">
+							<label>Teléfono</label> <input id=telf
+								th:field="*{telefonoContact}" type="text" class="form-control">
+						</div>
+
+						<div class="form-group col-8" align="left">
+							<label>Correo</label> <input id=correo
+								th:field="*{correoContact}" type="text" class="form-control">
+						</div>		
+				</div>
+				<div class="card-footer">
+					    <input id="btnSubmit" type="submit" value="Guardar"
+						class="btn btn-success" onclick="validate()">
+						` 
+						<input id="btnClean" type="button" value="Limpiar Campos"
+						class="btn btn-info" onclick="cleanForm()">
+						
+					</div>	
+				</div>		
+			</form>
+		</div>
+	</div>
+	<br/><br/><br/><br/>
+	<footer class="footer" th:replace="/footer :: footer"></footer>
+ 
+	<script type="text/javascript">
+		$(function validate() {
+			$("#btnSubmit")
+					.click(
+							function() {
+
+								var name = $("#contacto").val();
+								var telf = $("#telf").val();
+								var correo = $("#correo").val();
+								var proyecto = document.getElementById("proyecto");
+								
+								if (name == '' && telf == '' && correo == '' && proyecto.value == '') {	
+									
+									$("#proyecto").focus();
+													
+									swal({
+										title : "Por favor complete los campos requeridos en el formulario!!!",
+										icon : "warning",
+										button : "Volver",
+									})
+									return false;
+								}
+
+								else {
+									swal({
+										title : "Registro creado exitosamente!!!",
+										icon : "success",
+										timer: 16000,
+										button : "Listo",
+										
+									})
+									return true;
+								}
+							});
+		});
+		
+		function removeDuplicateOptions(selectNode) {
+	
+		if (typeof selectNode === "string") {
+				selectNode = document.getElementById("proyecto");
+			}
+
+			var seen = {}, options = [].slice.call(selectNode.options), length = options.length, previous, option, value, text, i;
+
+			for (i = 0; i < length; i += 1) {
+				option = options[i];
+				value = option.value, text = option.firstChild.nodeValue;
+				previous = seen[value];
+				if (typeof previous === "string" && text === previous) {
+					selectNode.removeChild(option);
+				} else {
+					seen[value] = text;
+				}
+			}
+		}
+
+		removeDuplicateOptions("proyecto");
+
+	    function removeDuplicateOptions1(selectNode) {
+			
+			if (typeof selectNode === "string") {
+					selectNode = document.getElementById("ciudad");
+				}
+
+				var seen = {}, options = [].slice.call(selectNode.options), length = options.length, previous, option, value, text, i;
+
+				for (i = 0; i < length; i += 1) {
+					option = options[i];
+					value = option.value, text = option.firstChild.nodeValue;
+					previous = seen[value];
+					if (typeof previous === "string" && text === previous) {
+						selectNode.removeChild(option);
+					} else {
+						seen[value] = text;
+					}
+				}
+			}
+
+			removeDuplicateOptions1("ciudad");
+			
+			function removeDuplicateOptions2(selectNode) {
+				
+				if (typeof selectNode === "string") {
+						selectNode = document.getElementById("sector");
+					}
+
+					var seen = {}, options = [].slice.call(selectNode.options), length = options.length, previous, option, value, text, i;
+
+					for (i = 0; i < length; i += 1) {
+						option = options[i];
+						value = option.value, text = option.firstChild.nodeValue;
+						previous = seen[value];
+						if (typeof previous === "string" && text === previous) {
+							selectNode.removeChild(option);
+						} else {
+							seen[value] = text;
+						}
+					}
+				}
+
+				removeDuplicateOptions2("sector");
+				
+				
+				function removeDuplicateOptions3(selectNode) {
+					
+					if (typeof selectNode === "string") {
+							selectNode = document.getElementById("constructora");
+						}
+
+						var seen = {}, options = [].slice.call(selectNode.options), length = options.length, previous, option, value, text, i;
+
+						for (i = 0; i < length; i += 1) {
+							option = options[i];
+							value = option.value, text = option.firstChild.nodeValue;
+							previous = seen[value];
+							if (typeof previous === "string" && text === previous) {
+								selectNode.removeChild(option);
+							} else {
+								seen[value] = text;
+							}
+						}
+					}
+
+					removeDuplicateOptions3("constructora");
+					
+					function removeDuplicateOptions4(selectNode) {
+						
+						if (typeof selectNode === "string") {
+								selectNode = document.getElementById("status");
+							}
+
+							var seen = {}, options = [].slice.call(selectNode.options), length = options.length, previous, option, value, text, i;
+
+							for (i = 0; i < length; i += 1) {
+								option = options[i];
+								value = option.value, text = option.firstChild.nodeValue;
+								previous = seen[value];
+								if (typeof previous === "string" && text === previous) {
+									selectNode.removeChild(option);
+								} else {
+									seen[value] = text;
+								}
+							}
+						}
+
+						removeDuplicateOptions4("zona");
+						
+						function removeDuplicateOptions5(selectNode) {
+							
+							if (typeof selectNode === "string") {
+									selectNode = document.getElementById("zona");
+								}
+
+								var seen = {}, options = [].slice.call(selectNode.options), length = options.length, previous, option, value, text, i;
+
+								for (i = 0; i < length; i += 1) {
+									option = options[i];
+									value = option.value, text = option.firstChild.nodeValue;
+									previous = seen[value];
+									if (typeof previous === "string" && text === previous) {
+										selectNode.removeChild(option);
+									} else {
+										seen[value] = text;
+									}
+								}
+							}
+
+							removeDuplicateOptions5("zona");
+
+			
+			function cleanForm() {
+				document.getElementById("registro_info").reset();
+			}
+		
+	</script> 
+	
+	<!-- <div class="form-group col-8" align="left">
+							<label>Nombre del Proyecto</label> <input id=nombre th:field="*{obra.nombreObr}" type="text" class="form-control">
+						</div> -->
+
+					<!-- <div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.nombreObr}">
+								<option value="0">Seleccione el Proyecto</option>
+								<option th:value="Proyecto1" th:text="'Proyecto1'"></option>
+								<option th:value="Proyecto2" th:text="'Proyecto2'"></option>
+								<option th:value="Proyecto3" th:text="'Proyecto3'"></option>
+								<option th:value="Proyecto4" th:text="'Proyecto4'"></option>
+								<option th:value="Proyecto5" th:text="'Proyecto5'"></option>
+							</select>
+						</div>  -->
+
+					<!-- <div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.ciudadObr}">
+								<option value="0">Seleccione la ciudad</option>
+									<option th:value="Quito" th:text="'Quito'"></option>
+									<option th:value="Guayaquil" th:text="'Guayaquil'"></option>							
+								<option th:each="obr: ${obras}"
+									th:value="${obr.idObr}" th:text="${obr.nombreObr}"></option>
+							</select>
+						</div> 
+						 -->
+					<!-- <div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.sectorObr}">
+								<option value="0">Seleccione el sector</option>
+								<option th:value="Norte" th:text="'Norte'"></option>
+								<option th:value="Sur" th:text="'Sur'"></option>
+								<option th:value="Centro" th:text="'Centro'"></option>
+								<option th:value="Chillos" th:text="'Chillos'"></option>
+								<option th:value="Tumbaco" th:text="'Tumbaco'"></option>
+							</select>
+						</div> 
+						
+						<div class="form-group col-8">
+							<select class="form-control" id="dropObra" th:field="*{obra.constructoraObr}">
+								<option value="0">Seleccione el constructor</option>
+									<option th:value="ConstructorA" th:text="'ConstructorA'"></option>
+									<option th:value="ConstructorB" th:text="'ConstructorB'"></option>
+									<option th:value="ConstructorC" th:text="'ConstructorC'"></option>
+									<option th:value="ConstructorD" th:text="'ConstructorD'"></option>							
+							</select>
+						</div> 
+							
+						<div  class="form-group col-8">								
+								 <select  class="form-control" id="porcentajeObras" th:field="*{obra.avanceObr}">
+									<option value="0">Seleccione el avance</option>									
+									<option th:value="0+'%'" th:text="'0%'"></option>
+									<option th:value="10+'%'" th:text="'10%'"></option>
+									<option th:value="20+'%'" th:text="'20%'"></option>
+									<option th:value="30+'%'" th:text="'30%'"></option>
+									<option th:value="40+'%'" th:text="'40%'"></option>
+									<option th:value="50+'%'" th:text="'50%'"></option>
+									<option th:value="60+'%'" th:text="'60%'"></option>
+									<option th:value="70+'%'" th:text="'70%'"></option>
+									<option th:value="80+'%'" th:text="'80%'"></option>
+									<option th:value="90+'%'" th:text="'90%'"></option>
+									<option th:value="100+'%'" th:text="'100%'"></option>
+								</select>
+						</div>
+						
+						<div  class="form-group col-8">							
+								 <select  class="form-control" id="estadoObras" th:field="*{obra.statusObr}">
+									<option value="">Seleccione el estado</option>									
+									<option th:value="Abortado" th:text="'Abortado'"></option>
+									<option th:value="En_Marcha" th:text="'En_Marcha'"></option>
+									<option th:value="Paralizado" th:text="'Paralizado'"></option>
+									<option th:value="Total_Vendido" th:text="'Total_Vendido'"></option>						
+								</select>
+						</div>
+						 -->
+
+
+					<!-- <div class="form-group col-12" align="left">
+								<label>Comentarios</label>
+								<textarea th:field="*{comentarioVis}" type="text"
+									class="form-control" style="height: 150px"></textarea>
+						</div> -->	
+	
+	
+<!-- 	<script type="text/javascript">
+	
+ 	$("#ciudad").change(function() {
+ 		  if ($(this).data('options') === undefined) {
+		    /*Taking an array of all options-2 and kind of embeddng it on the select1*/
+ 		     $(this).data('options', $('#proyecto option').clone());
+ 		   
+ 		    } 		  
+ 			 var id = $(this).val();
+ 	 		 var options = $(this).data('options').filter('[value=' + id + ']');
+ 	 		 $('#proyecto').html(options);
+ 	 	
+ 			
+ 	});		
+ 	
+ 	$("#zona").change(function() {
+		  if ($(this).data('options') === undefined) {
+		    /*Taking an array of all options-2 and kind of embeddng it on the select1*/
+		     $(this).data('options', $('#sector option').clone());
+		   
+		    } 		  
+			 var id = $(this).val();
+	 		 var options = $(this).data('options').filter('[value=' + id + ']');
+	 		 $('#sector').html(options);	 	
+			
+	});
+ 	
+	</script> -->
+	
+	
+		
+<!-- 	<script type="text/javascript">
+ 	
+//  	$("#zona").change(function() {
+// 		  if ($(this).data('options') === undefined) {
+// 		    /*Taking an array of all options-2 and kind of embeddng it on the select1*/
+// 		     $(this).data('options', $('#sector option').clone());
+		   
+// 		    } 		  
+// 			 var id = $(this).val();
+// 	 		 var options = $(this).data('options').filter('[value=' + id + ']');
+// 	 		 $('#sector').html(options);	 	
+			
+// 	});
+ 	
+	</script>
+	 -->
+	
+
+</body>
+</html>
