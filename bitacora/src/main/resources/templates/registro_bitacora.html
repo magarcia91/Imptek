@@ -16,6 +16,19 @@
 
   <link rel="stylesheet" type="text/css" href="static/css/index1.css" th:href="@{/css/index1.css}">
   <link rel="stylesheet" type="text/css" href="static/css/has-errors.css" th:href="@{/css/has-errors.css}">
+  
+  <style>
+		.swal-button {
+		  padding: 10px 35px;
+		  border-radius: 2px;
+		  background-color: #4962B3;
+		  font-size: 12px;
+		  color: ivory;
+		  margin-left: 80px;
+		  border: 1px solid #3e549a;
+ 		  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.3); 
+		}	    
+  </style>
     
 </head>
 <body style="background-color: #e9e9e9;">
@@ -23,8 +36,8 @@
 <div th:replace="/header :: header"></div>	
 	<div class="container py-6">			
 			<div class="col-md-7"  align="center">
-				<form id="registro_fact" th:action="@{/factura/save}"
-					th:object=${factura} method="POST" enctype="multipart/form-data" class="row justify-content-center">			
+				<form id="registro_fact" th:action="@{/factura/save}" th:object=${factura} method="POST" enctype="multipart/form-data"
+					 onsubmit="return validateForm()" class="row justify-content-center">			
 						
 							<h3>Registro de Información</h3>
 						
@@ -113,9 +126,9 @@
 							<div th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}" class="form-group col-md-6 item1">
 								<fieldset th:disabled="${boPPago}">
 									<label>Subtotal</label>
-									<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" id=valorPPago name="valorPPago" th:field="*{valorPPago}" type="text" placeholder="ej: 99.999999" 
+									<input th:case="${#authorization.expression('hasRole(''ROLE_FINAN'')')}" th:field="*{valorPPago}" id=valorPPago name="valorPPago" type="text" placeholder="ej: 99.999999" 
 									class="form-control" style="border: 1px solid black" readonly>
-									<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" id=valorPPago name="valorPPago" th:field="*{valorPPago}" 
+									<input th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')') or #authorization.expression('hasRole(''ROLE_ASIST'')')}" th:field="*{valorPPago}" id=valorPPago name="valorPPago"
 									type="text" placeholder="ej: 99.999999" class="form-control" style="border: 1px solid black">
 								</fieldset>
 							</div>
@@ -246,7 +259,7 @@
 																					    
 							<div class="form-group col-md-12" align="left" style="top:-15px;">
 									<input id="btnSubmit" type="submit" value="Guardar"
-										class="btn btn-success" onclick="validate()"> 
+										class="btn btn-success" onclick="validateEmpty(); validate()"> 
 									<input id="btnClean" type="button" value="Limpiar Campos"
 										class="btn btn-info" onclick="cleanForm()">
 								<a th:href="@{/userForm}" class="btn btn-warning btn-md" style="top:5px; height: 42px; font-size:18px"><span
@@ -369,18 +382,6 @@
 			  //document.getElementById("fotoLote").disabled = true;
 			}
 		</script>		
-						
-		<!--<script type="text/javascript">
-		 $(document).ready(function (){
-	        var selectValor = $('#numFact').val();
-		           //alert (selectValor);
-		       		
-		        if (selectValor > '0') {
-		           //alert (selectValor);
-		            myFunction();
-		        }
-		    });
-		</script> -->
 			
 		<script type="text/javascript">
 		
@@ -395,28 +396,61 @@
 								var referencia= $("#factReferencia").val();
 								var monto= $("#valorPago").val();
 								var docSap= $("#docFacSap").val();
-													
+								var fecha = document.forms["registro_fact"]["fechaFact"].value;
+								var fecha1 = document.forms["registro_fact"]["fechaComp"].value;
+								var fecha2 = document.forms["registro_fact"]["createAt"].value;
+								var formaPago = $("#pago").val();
+								var prontoPago = $("#ppago").val();
+								var centroFactura = $("#centroFactura").val();
+								
+								if(formaPago == '13'){										
 																								
-								if (numFact == ''  && comp == '' && numLote == '' && referencia == ''
-									&& docSap == '' && monto == '') {	
-																					
-									swal({
-										title : "Por favor complete los campos requeridos en el formulario!!!",
-										icon : "warning",
-										button : "Ok",
-									})
-									return false;
-								}
-
-								else {
-									swal({
-										title : "Registro creado exitosamente!!!",
-										icon : "success",
-										timer: 160000000,
- 										button : "Ok",
-										
-									})
-									return true;
+									if (numFact == ''  || comp == '' || numLote == '' || referencia == ''
+										|| docSap == '' || monto == '' || fecha == "" || fecha1 == "" ||
+										fecha2 == "" || formaPago == "" || prontoPago == "" || centroFactura == "") {	
+																						
+										swal({
+											title : "Por favor complete los campos requeridos en el formulario!!!",
+											icon : "warning",
+											button : "Regresar",
+										})
+										return false;
+									}
+									
+									else {
+										swal({
+											title : "Registro creado exitosamente!!!",
+											icon : "success",
+											timer: 160000000000,
+											button : "OK",
+										})							
+	
+										return true;
+									}
+								}else {
+									
+									if (numFact == ''  || comp == '' || docSap == '' || monto == '' || fecha == "" || fecha1 == "" ||
+										fecha2 == "" || formaPago == "" || prontoPago == "" || centroFactura == "") {	
+																						
+										swal({
+											title : "Por favor complete los campos requeridos en el formulario!!!",
+											icon : "warning",
+											button : "Regresar",
+										})
+										return false;
+									}
+									
+									else {
+										swal({
+											title : "Registro creado exitosamente!!!",
+											icon : "success",
+											timer: 160000000,
+											button : "OK",
+										})							
+	
+										return true;
+									}
+									
 								}
 							});
 		});
@@ -426,10 +460,71 @@
 		}
 		
 		</script>
+			  	
+	  	<script type="text/javascript">	
+		
+	  	function validateEmpty() {
+	  	  	
+	  		var f1 = document.getElementById("fechaFact");
+	  	    var f2 = document.getElementById("fechaComp");
+	  	    var f3 = document.getElementById("createAt");
+	  	    var f4 = document.getElementById("valorPago");
+	  	  	var f5 = document.getElementById("valorPPago");
+	  	    var f6 = document.getElementById("fotoPago");	
+	  	    var f7 = document.getElementById("fotoLote");
+	  	    var f8 = document.getElementById("numFact");
+	  		var f9 = document.getElementById("factNumLote");
+	  		var f10 = document.getElementById("numComp");
+	  		var f11 = document.getElementById("factReferencia");
+	  		var f12 = document.getElementById("docFacSap"); 
+	  		var f13 = document.getElementById("centroFactura"); 
+	  		
+	  	      	    
+	  	  	var ferror = [f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13];
+	  	    var i;
+	  	    
+	  	    for (i = 0; i < ferror.length; i++) {
+	  	      if(ferror[i].value.length < 1){
+	  	        ferror[i].style.backgroundColor = "#FDF5E6";
+	  	      }
+	  	    }
+	  	 }
+		
+	  	</script> 
+	  		  		
+		<script type="text/javascript">	
+		
+		function validateForm() {
+			
+			  var x = document.forms["registro_fact"]["valorPPago"].value;
+			  var x1 = document.forms["registro_fact"]["ppago"].value;
+	
+			 		  
+			  if (x == "" && x1 == '101') {
+			    alert("POR FAVOR INGRESE EL CAMPO SUBTOTAL y LOS CAMPOS RESALTADOS");
+			    return false;
+			  }
+			}	
+		
+	  	</script>	
+	  	
 	</body>
 </html>
-											
- 							<!--<div class="form-group col-md-6">
+
+									
+							<!--<script type="text/javascript">
+							 $(document).ready(function (){
+						        var selectValor = $('#numFact').val();
+							           //alert (selectValor);
+							       		
+							        if (selectValor > '0') {
+							           //alert (selectValor);
+							            myFunction();
+							        }
+							    });
+							</script> -->	
+													
+	 						<!--<div class="form-group col-md-6">
 								<label>Constructor de la Obra</label> <input id=constObrEx
 									name="constObrEx" th:field="*{constObrEx}" type="text"
 									placeholder="ej: CONSTRUCTOR" class="form-control">

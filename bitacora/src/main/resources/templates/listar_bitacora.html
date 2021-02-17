@@ -29,9 +29,35 @@
 	    	width: 100% !important;
 	    }
 	    
+	   	.pagination>.active>a, .pagination>.active>a:focus, 
+	    .pagination>.active>a:hover, .pagination>.active>span, 
+	    .pagination>.active>span:focus, .pagination>.active>span:hover {
+    	z-index: 0 !important;
+	    
 	</style>
 	
-	  
+	<style>
+		.bitacoraTable {
+		max-width: 600px;
+		margin: 0 auto;
+		}
+		#bitacoraTable th, td {
+		white-space: nowrap;
+		}
+		table.dataTable thead .sorting:after,
+		table.dataTable thead .sorting:before,
+		table.dataTable thead .sorting_asc:after,
+		table.dataTable thead .sorting_asc:before,
+		table.dataTable thead .sorting_asc_disabled:after,
+		table.dataTable thead .sorting_asc_disabled:before,
+		table.dataTable thead .sorting_desc:after,
+		table.dataTable thead .sorting_desc:before,
+		table.dataTable thead .sorting_desc_disabled:after,
+		table.dataTable thead .sorting_desc_disabled:before {
+		bottom: .5em;
+	</style>
+	
+	
 </head>
 
 <body style="background-color: #e9e9e9;">
@@ -81,7 +107,7 @@
 			</div>
 		</form>	
 
-		<br><br><br>
+		<br><br><br><br>	
 				
 		<div>			
 			<table id="bitacoraTable" class="table-responsive-xl table-bordered table-hover table-condensed mb-0;" style="background-color: white; margin-left: -200px; position: relative">
@@ -106,6 +132,8 @@
 						<th style="text-align: center">Depósito</th>
 						<th style="text-align: center">Pronto Pago</th>
 						<th style="text-align: center">Valor</th>
+						<th style="text-align: center">Estado</th>
+						<th style="text-align: center">ANULACIÓN</th>
 						<th style="text-align: center">ACCIONES</th>
 														
 						<!-- <th style="text-align: center">FECHA COTIZACIÓN</th>	
@@ -168,17 +196,17 @@
 						<td th:text="${f.fechaComp}"></td>
 						<td th:text="${f.centroFactura}"></td>
 						<td th:text="${f.createAt}"></td>
-						<td th:text="${f.factComprobacion} ? 'Comprobada' : 'En Revisión'"></td>
+						<td th:text="${f.factComprobacion} ? 'Comprobado' : 'En Revisión'"></td>
 						<td th:text="${f.ppago.tipoAccion}"></td>
 						<td th:text="${f.valorPPago}"></td>
-						<!-- <td>
-							<input type="checkbox"
-						           th:value="${f.factEstado}"/>
-						</td> -->
-						<!-- <td th:text="${o.fechaCotObrEx}"></td>											
-						<td th:text="${o.fechaCieObrEx}"></td>
-						<td th:text="${o.comentObrEx}"></td> -->	
-												
+						<td>
+						  <input type="checkbox" name="myBooleanVariable"  th:checked="${f.factEstado}"/>
+						  <a th:text="${f.factEstado} ? 'Anulada' : 'Correcta'"></a>
+						</td>
+						
+						<td> <a th:href="@{/factura/anular/}+${f.idFact}" class="btn btn-primary">Anular</a>
+						</td> 
+																	
 						<td th:switch="${#authentication}? ${#authorization.expression('isAuthenticated()')}: ${true}">
 							<form id="editar" action="#" th:action="@{/factura/editar/}+${f.idFact}" method="get">
 								<button th:case="${#authorization.expression('hasRole(''ROLE_ASIST'')') or #authorization.expression('hasRole(''ROLE_SUPERVISOR'')')}" th:disabled="disabled" style="width: 63px; height: 35px" value="Editar" class="btn btn-danger">Editar</button>
@@ -187,8 +215,19 @@
 							<form id="editar" action="#" th:action="@{/factura/editar/}+${f.idFact}" method="get">
 								<button th:case="${#authorization.expression('hasRole(''ROLE_ADMIN'')') or #authorization.expression('hasRole(''ROLE_FINAN'')') }" style="width: 63px; height: 35px" value="Editar" class="btn btn-danger">Editar</button>
 							</form>
+						</td>	
+						
+												
+						<!-- <td>
+							<input type="checkbox"
+						           th:value="${f.factEstado}"/>
+						</td> -->
+						<!-- <td th:text="${o.fechaCotObrEx}"></td>											
+						<td th:text="${o.fechaCieObrEx}"></td>
+						<td th:text="${o.comentObrEx}"></td> -->	
+							
 						<!-- <a th:href="@{/factura/editar/}+${f.idFact}" class="btn btn-danger">Editar</a>	 -->						
-						</td> 
+						
 						<!-- <form id="registro_fact" th:action="@{/factura/save}"
 							th:object=${factura} method="POST" enctype="multipart/form-data" class="row justify-content-center">	
 							<td>
@@ -214,10 +253,10 @@
 							class="glyphicon glyphicon-download-alt"></span> Generar1 PDF</a> -->
 			</div>
 				
-			<div align="center" style="margin-top: -17px; position: fixed">
-				<div class="row" style="width:100% !important;">
+			<div align="center">
+				<div class="row" style="width:130% !important; margin-top: -17px">
 					<div class="col-md-2"></div>
-					<div class="col-md-16">
+					<div class="col-md-12">
 						<nav aria-label="Pagination">
 							<ul class="pagination justify-content-center">
 								<li class="page-item" th:classappend="${prev == 0 ? 'disabled': ''}">
@@ -232,7 +271,7 @@
 							</ul>
 						</nav>
 					</div>
-				<!-- <div class="col-md-2"></div> -->
+				<div class="col-md-2"></div>
 			  </div>
 			</div>
 		</div>
@@ -310,6 +349,18 @@
 	  
 	</script>	
 	
+		
+	<!-- <script>
+	$(document).ready(function () {
+		$('#bitacoraTable').DataTable({
+		"scrollX": true,
+		"scrollY": 200,
+		});
+		$('.dataTables_length').addClass('bs-select');
+		});
+	</script> -->
+	
+
 	<!-- <form id="editar" action="#" th:action="@{editar/}+${f.idFact}" method="get" role="form">
 			<td>
 				<input type="submit" id="btnEditar" class="btn btn-danger"

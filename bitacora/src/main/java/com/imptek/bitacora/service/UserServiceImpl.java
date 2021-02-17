@@ -155,4 +155,15 @@ public class UserServiceImpl implements UserService{
 		
 		return repository.findByRole(user_id);
 	}
+
+	@Override
+	public String cambiarClave(String claveActual) {
+		String encodePassword = bCryptPasswordEncoder.encode(claveActual);
+		return encodePassword;
+	}
+
+	@Override
+	public Users getUserByName(String userName) throws UsernameOrIdNotFound {
+		return repository.findByUsername(userName).orElseThrow(() -> new UsernameOrIdNotFound("El Usuario no existe."));
+	}
 }

@@ -3,6 +3,7 @@ package com.imptek.bitacora.entity;
 import java.io.Serializable;
 import java.sql.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,9 +42,12 @@ public class Factura implements Serializable {
 	private String fotoPago;	
 	private String centroFactura; 
 	private boolean factComprobacion;
+	@Column
+	private Boolean factEstado=false;
+	private Date createAt;
 	//private boolean factEstado;
 	//private boolean factCatalogo;
-	private Date createAt;
+	
 	
 	/*@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id")
@@ -83,7 +87,7 @@ public class Factura implements Serializable {
 	
 	public Factura(Long idFact, String numFact, Date fechaFact, String numComp, Date fechaComp,
 			String docFacSap, String factNumLote, String factReferencia,Double valorPago,Double valorPPago,String fotoLote, String fotoPago, String centroFactura,
-			boolean factComprobacion, Date createAt, Cliente cliente, Pago pago,ProntoPago ppago) {
+			boolean factComprobacion, Boolean factEstado, Date createAt, Cliente cliente, Pago pago,ProntoPago ppago) {
 		
 		this.idFact = idFact;
 		this.numFact = numFact;
@@ -101,6 +105,7 @@ public class Factura implements Serializable {
 		this.factComprobacion = factComprobacion;
 		//this.factEstado = factEstado;
 		//this.factCatalogo = factCatalogo;
+		this.factEstado = factEstado;
 		this.createAt = createAt;
 		this.cliente = cliente;
 		this.pago = pago;
@@ -261,6 +266,16 @@ public class Factura implements Serializable {
 
 	public void setCentroFactura(String centroFactura) {
 		this.centroFactura = centroFactura;
+	}
+
+		
+	public Boolean getFactEstado() {
+		return factEstado;
+	}
+
+
+	public void setFactEstado(Boolean factEstado) {
+		this.factEstado = factEstado;
 	}
 
 

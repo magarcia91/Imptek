@@ -1,5 +1,5 @@
 <div th:fragment="header">
-<nav class="navbar navbar" style="background-color: #1AACE7; width: 180% ">
+<nav class="navbar navbar" style="background-color: #1AACE7; width: 195% ">
 		<div class="container-fluid">
 			<!-- Brand and toggle get grouped for better mobile display -->
 			<div class="navbar-header">
@@ -59,7 +59,7 @@
 									
 							<!-- <li role="separator" class="divider"></li> -->
 							<li><a href="/factura/bitacoraListar" style="color:#000000"><span
-								class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Visualizar Informaci&oacute;n</a></li>								
+								class="glyphicon glyphicon-th-list" aria-hidden="true"></span> Informaci&oacute;n Registrada</a></li>								
 							<!-- <li role="separator" class="divider"></li> -->		
 																		
 						</ul></li>
@@ -82,8 +82,8 @@
 						aria-expanded="false" style="color:#000000"><span class="glyphicon glyphicon-user"
 							aria-hidden="true"></span><span style="text-transform:uppercase" th:text="${#authentication.getPrincipal().getUsername()}"></span><span class="caret"></span></a>
 						<ul class="dropdown-menu">		
-							<!-- <li><a href="/" target="_blank" style="color:#000000"><span
-									class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configuracion Usuario</a></li> -->								
+							<li><a th:href="@{/modificarUsuario/}+${#authentication.getPrincipal().getUsername()}" style="color:#000000"><span
+									class="glyphicon glyphicon-cog" aria-hidden="true"></span> Configuraci&oacute;n Usuario</a></li>								
 							<li><a href="/"><span	class="glyphicon glyphicon-log-out" aria-hidden="true"></span>
 									Cerrar Sesion</a></li>
 						</ul></li>

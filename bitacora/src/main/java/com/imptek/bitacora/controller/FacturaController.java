@@ -105,7 +105,7 @@ public class FacturaController {
 			codCliente=codCliente.trim();
 		}
 	
-		PageRequest pageRequest = PageRequest.of(page, 6);
+		PageRequest pageRequest = PageRequest.of(page, 8);
 		
 		Page<Factura> listaFactCli = factService.buscarDatos(pageRequest, codCliente);
 		
@@ -224,15 +224,14 @@ public class FacturaController {
 		
 		if(factura.get().getPago()!=null && factura.get().getPpago()!=null ) {
 			
-			if("TARJETA".equals(factura.get().getPago().getFormaPago().toUpperCase()) && 
-			   "NO APLICA".equals(factura.get().getPpago().getTipoAccion().toUpperCase())) {
+			if("TARJETA".equals(factura.get().getPago().getFormaPago().toUpperCase())) {
 				/*factura.get().setBoLote("disabled");
 				factura.get().setBoPago("disabled");*/
 				model.addAttribute("estiloPago", "visibility:hidden;");
 				model.addAttribute("estiloLote", "visibility:hidden;");
 				model.addAttribute("boPago","disabled");
 				model.addAttribute("boLote","disabled");
-				model.addAttribute("boPPago","disabled");
+				//model.addAttribute("boPPago","disabled");
 				
 			}else if("EFECTIVO".equals(factura.get().getPago().getFormaPago().toUpperCase()) ||
 					"TRANSFERENCIA".equals(factura.get().getPago().getFormaPago().toUpperCase()) ||
@@ -242,7 +241,7 @@ public class FacturaController {
 				model.addAttribute("boLote","disabled");
 				model.addAttribute("boNumLote","disabled");
 				model.addAttribute("boRef","disabled");
-				model.addAttribute("boPPago","disabled");
+				//model.addAttribute("boPPago","disabled");
 	
 				
 				
@@ -267,6 +266,22 @@ public class FacturaController {
 		return "registro_bitacora";
 	}
 	
+	
+	@GetMapping("anular/{idFact}")
+	public String anular(@PathVariable(value = "idFact") Long idFact, Model model) {
+		List<Pago> pago = new ArrayList<>();	 	        
+		model.addAttribute("pago", pago);	
+		Optional<Factura> factura = factRepository.findById(idFact);
+		
+		factura.get().setFactEstado(true);
+		
+		clienteService.saveFactura(factura.get());
+		List<Pago> pagos = pagoService.findAll();
+		model.addAttribute("factura", factura);
+		model.addAttribute("pagos", pagos);
+		return "redirect:/factura/bitacoraListar";
+	}
+	
 	@GetMapping("eliminar/{idFact}")
 	public String eliminar(@PathVariable Long idFact, RedirectAttributes flash) {
 
@@ -285,7 +300,7 @@ public class FacturaController {
 		
 		//List<Factura> factura = factRepository.getAllBetweenDates(startDate, endDate);
 		
-		PageRequest pageRequest = PageRequest.of(page, 6);
+		PageRequest pageRequest = PageRequest.of(page, 8);
 		
 		Page<Factura> listaFacturas = factService.getAll(pageRequest);
 		
@@ -317,7 +332,7 @@ public class FacturaController {
 		if (!Objects.isNull(filtro.getStartDate()) && !Objects.isNull(filtro.getEndDate())) {		
 			List<Factura> factura = factRepository.getAllBetweenDates(filtro.getStartDate(),filtro.getEndDate());			
 			
-			PageRequest pageRequest = PageRequest.of(page, 6);
+			PageRequest pageRequest = PageRequest.of(page, 8);
 			
 			Page<Factura> listaFacturas = factService.getAll(pageRequest);
 			

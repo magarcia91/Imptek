@@ -62,7 +62,7 @@ public class FacturaServiceImpl implements FacturaService {
 	    	   HSSFFont headerFont = workbook.createFont();
 	    	   headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 	           headerCellStyle.setFont(headerFont);
-	    	   headerCellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+	    	   headerCellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 	    	   headerCellStyle.setFillForegroundColor(HSSFColor.YELLOW.index);
 	    	   headerCellStyle.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
 	    	   
@@ -132,6 +132,10 @@ public class FacturaServiceImpl implements FacturaService {
 	    	   valorProntoPago.setCellValue("Subtotal");
 	    	   valorProntoPago.setCellStyle(headerCellStyle);
 	    	   
+	    	   HSSFCell anulacionFact = headerRow.createCell(14);
+	    	   anulacionFact.setCellValue("Anulación");
+	    	   anulacionFact.setCellStyle(headerCellStyle);
+	    	   
 	    	  	    	   
 	    	   int i = 1;
 	    	   for (Factura factura : facturas) {
@@ -141,7 +145,7 @@ public class FacturaServiceImpl implements FacturaService {
 	    		   
 	    		   HSSFCellStyle bodyCellStyle = workbook.createCellStyle();
 	    		   bodyCellStyle.setFillForegroundColor(HSSFColor.WHITE.index);
-	    		   bodyCellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+	    		   bodyCellStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
 	    		    		   
 	    		   HSSFCell  codClienteValue = bodyRow.createCell(0);
 	    		   codClienteValue.setCellValue(factura.getCliente().getCodCliente());
@@ -178,7 +182,7 @@ public class FacturaServiceImpl implements FacturaService {
 	    		   numLoteValue.setCellValue(factura.getFactNumLote());
 	    		   numLoteValue.setCellStyle(bodyCellStyle);
 	    		   
-	    		   HSSFCell  factReferenciaValue = bodyRow.createCell(8);
+	    		   HSSFCell factReferenciaValue = bodyRow.createCell(8);
 	    		   factReferenciaValue.setCellValue(factura.getFactReferencia());
 	    		   factReferenciaValue.setCellStyle(bodyCellStyle);
 	    		   
@@ -209,6 +213,10 @@ public class FacturaServiceImpl implements FacturaService {
 	     		   HSSFCell valorProntoPagoValue = bodyRow.createCell(13);
 	     		   valorProntoPagoValue.setCellValue(s1=String.valueOf(factura.getValorPPago()));
 	     		   valorProntoPagoValue.setCellStyle(bodyCellStyle);
+	     		   
+	     		   HSSFCell anulacionFactValue = bodyRow.createCell(14);
+	     		   anulacionFactValue.setCellValue(s2=String.valueOf(factura.getFactEstado()));
+	     		   anulacionFactValue.setCellStyle(bodyCellStyle);
 	    		 
 	    		   i++;
 				

@@ -43,6 +43,23 @@ public class UserController {
 	@Autowired
 	RoleRepository roleRepository;
 	
+	
+	@GetMapping("modificarUsuario/{userNombre}")
+	public String modificaUsuario(Model model, @PathVariable(value = "userNombre") String userNombre) {
+		Users userToEdit;
+		try {
+			userToEdit = userService.getUserByName(userNombre);
+			//baseAttributerForUserForm(model, userToEdit, TAB_FORM );
+			model.addAttribute("editMode","true");
+			model.addAttribute("usuario",userToEdit);
+			model.addAttribute("passwordForm",new ChangePasswordForm());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "modificar_pwd";
+		//return "user-form/user-listedit.html";
+	}
+	
 	@GetMapping({"/","/login"})
 	public String index() {
 		return "index";
@@ -163,7 +180,34 @@ public class UserController {
 	
 	@PostMapping("/editUser")
 	public String postEditUserForm(@Valid @ModelAttribute("userForm")Users user, BindingResult result, Model model) {
-		if(result.hasErrors()) {
+		
+		try {
+			Users userActual = userService.getUserById(user.getId());
+			model.addAttribute("editMode","true");
+			model.addAttribute("usuario",user);
+			model.addAttribute("passwordForm",new ChangePasswordForm());
+			if(!user.getPassword().equals(user.getConfirmPassword())) {
+				model.addAttribute("error", "Las contraseñas no son iguales");
+				return "modificar_pwd";
+			}else {
+				model.addAttribute("exito", "Registro modificado con exito");
+				user.setPassword(userService.cambiarClave(user.getPassword()));
+				user.setConfirmPassword(userService.cambiarClave(user.getConfirmPassword()));
+				userActual.setPassword(user.getPassword());
+				userActual.setConfirmPassword(user.getConfirmPassword());
+				userService.updateUser(userActual);
+				//baseAttributerForUserForm(model, new Users(), TAB_LIST );
+			}
+		} catch (Exception e) {
+			model.addAttribute("error",e.getMessage());
+			baseAttributerForUserForm(model, user, TAB_FORM );
+			model.addAttribute("editMode","true");
+			model.addAttribute("passwordForm",new ChangePasswordForm(user.getId()));
+		}
+		return "index";		
+	}
+	
+	/*	if(result.hasErrors()) {
 			baseAttributerForUserForm(model, user, TAB_FORM );
 			model.addAttribute("editMode","true");
 			model.addAttribute("passwordForm",new ChangePasswordForm(user.getId()));
@@ -179,10 +223,8 @@ public class UserController {
 				model.addAttribute("passwordForm",new ChangePasswordForm(user.getId()));
 			}
 		}
-		return "user-form/user-listusr";
+		return "user-form/user-listusr";*/
 		
-		
-	}
 	
 	@GetMapping("/userForm/cancel")
 	public String cancelEditUser(ModelMap model) {

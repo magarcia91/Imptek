@@ -14,11 +14,15 @@ public interface UserService {
 
 	public Users getUserById(Long id) throws Exception;
 	
+	public Users getUserByName(String userName) throws UsernameOrIdNotFound;
+	
 	public Users updateUser(Users user) throws Exception;
 	
 	public void deleteUser(Long id) throws UsernameOrIdNotFound;
 	
 	public Users changePassword(ChangePasswordForm form) throws Exception;
+	
+	public String cambiarClave(String claveActual);
 	
 	public List<Long> findByRole(Long user_id);	
 	
